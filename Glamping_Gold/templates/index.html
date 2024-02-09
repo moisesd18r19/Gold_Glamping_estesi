@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Contenido html del index -->
+<!--A continuación Contenido del carrusel (imagenes,text y botón leer más) -->
+<div>
+
+
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src= "../static/images/Imagen de WhatsApp 2023-12-07 a las 10.23.34_e3adb37c.jpg" class="d-block w-100" alt="">
+            <div class="carousel-caption">
+                <h5>Las mejores Cabañas </h5>
+                <p>
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                    Esse, doloribus ex saepe quos dolore veniam sit! Obcaecati
+                    minus ad vitae dolor necessitatibus quasi. Eum cum
+                    praesentium quas sapiente mollitia. Modi.
+                </p>
+                <p> <a href="" class="btn btn-primary mt-3">Leer Más</a> </p>
+            </div>
+        </div>
+
+        <div class="carousel-item">
+            <!-- Flechitas de los lados carrusel -->
+
+        <button class=
+        "carousel-control-prev"
+         type="button"
+                        data-bs-target=
+        "#carouselE1"
+         data-bs-slide="prev">
+                    <span class=
+        "carousel-control-prev-icon"
+         aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" 
+                        data-bs-target="#carouselE1" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            <img src="../static/images/cabana2.avif" class="d-block w-100" alt="">
+            <div class="carousel-caption">
+                <h5>Los mejores motores</h5>
+                <p>
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                    Esse, doloribus ex saepe quos dolore veniam sit! Obcaecati
+                    minus ad vitae dolor necessitatibus quasi. Eum cum
+                    praesentium quas sapiente mollitia. Modi.
+                </p>
+                <p> <a href="#" class="btn btn-primary mt-3">Leer Más</a> </p>
+            </div>
+        </div>
+
+        <div class="carousel-item">
+            <img src="../static/images/cabana3.jpg" class="d-block w-100" alt="">
+            <div class="carousel-caption">
+                <h5>Los mejores motores</h5>
+                <p>
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                    Esse, doloribus ex saepe quos dolore veniam sit! Obcaecati
+                    minus ad vitae dolor necessitatibus quasi. Eum cum
+                    praesentium quas sapiente mollitia. Modi.
+                </p>
+                
+                <p> <a href="" class="btn btn-primary mt-3">Leer Más</a> </p>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div>
+        <div class="d-flex justify-content-center ">
+            <h2>Glamping Gold</h2>
+            <img src="../static/images/icon.png" alt="">
+        </div>
+    </div>
+
+    <div class="d-md-flex text-white textform p-3">
+        <div class="p-3 bg-gradient-primary m-2">
+            <h3>Misión</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem illum molestiae hic ab eius architecto, incidunt error perspiciatis eos quasi assumenda perferendis minus aperiam consequuntur fugit a nostrum illo vel.</p>
+        </div>
+        <div class="p-3 bg-gradient-primary m-2">
+            <h3>Visión</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos neque quam deleniti enim quas repellendus doloribus ad tempora pariatur veritatis voluptates reprehenderit necessitatibus beatae ratione quo fuga saepe, reiciendis perspiciatis.</p>
+        </div>
+    </div>
+</div>
+
+
+{%endblock%}

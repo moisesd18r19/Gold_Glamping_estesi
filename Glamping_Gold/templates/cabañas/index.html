@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h4 class="m-0 font-weight-bold text-primary">Cabañas</h4>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+                        
+            <a href="{% url 'create_cabaña' %}" class="btn btn-primary btn-icon-split mb-3">
+                <span class="icon text-white-50">
+                  <i class="fas fa-plus"></i>
+              </span>
+              <span class="text">Crear cabaña</span>
+            </a>
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead class="table-dark">
+                    <tr>
+                        <td>Nombre</td>
+                        <td>Capacidad</td>
+                        <td>Precio</td>
+                        <td>Descripción</td>
+                        <td>Imagen</td>
+                        <td>Tipo Cabaña</td>
+                        <td>Estado</td>   
+                        <td>Acciones</td>                    
+                    </tr>
+                </thead>                
+                <tbody>
+                    {% for cabaña in cabañas_list %}
+                    <tr>
+                    <td>{{ cabaña.nombre }}</td>
+                    <td>{{ cabaña.capacidad }}</td>
+                    <td>{{ cabaña.precio }}</td>
+                    <td>{{ cabaña.descripcion }}</td>
+                    <td> <img src="{{ cabaña.imagen.url }}" alt="" width="50"> </td>
+                    <td>{{ cabaña.tipocabaña }}</td>
+                    
+                    
+                    <!-- Toggle Switch button -->
+                    <td>
+                        <form action="{% url 'cabaña_status' cabaña.id %}" method="POST">
+                            {% csrf_token %}                            
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="customSwitch{{ forloop.counter }}" {% if cabaña.status %} checked {% endif %} onchange="this.form.submit()">
+                                <label class="custom-control-label" for="customSwitch{{ forloop.counter }}"></label>
+                            </div>                     
+                        </form>
+                    </td>
+                    <td>
+
+                        
+
+                        <a href="" class="btn btn-info btn-circle btn-sm" data-bs-toggle="modal" data-bs-target="#modalId" data-cabaña-id="{{ cabaña.id }}">
+
+                            <i class="fas fa-info-circle"></i>
+                        </a>
+                        <a href="{% url 'edit_cabaña' cabaña.id %}" class="btn btn-warning btn-circle btn-sm">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="{% url 'delete_cabaña' cabaña.id %}" class="deleteBtn btn btn-danger btn-circle btn-sm">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                    </tr>
+                    {% endfor %}                                     
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- modal y script detalle -->
+
+<div class="modal fade" id="modalId" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+
+                <h5 class="modal-title" id="modalTitleId">Detalles de la cabaña</h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid" id="cabaña-details"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Función para cargar detalles del libro en el modal
+function loadCabañaDetails(cabañaId) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "{% url 'detail_cabaña' 0 %}".replace('0', cabañaId), true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4) {
+                if (xhr.status == 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    console.log(data);
+                    // Actualizar el contenido del modal con los detalles del libro
+                    document.getElementById("cabaña-details").innerHTML =
+                        "<p><strong>Nombre:</strong> " + data.nombre + "</p>" +
+                        "<p><strong>Capacidad:</strong> " + data.capacidad + "</p>" +
+                        "<p><strong>Precio:</strong> " + data.precio + "</p>" +
+                        "<p><strong>Descripcion:</strong> " + data.descripcion + "</p>";                
+
+                    $('#modalId').modal('show'); // Mover esta línea aquí
+                } else {
+                    console.error('Error fetching cabaña details. Status code: ' + xhr.status);
+                }
+            }
+        };
+        xhr.send();
+    }
+
+    // Asignar evento click a los botones de detalle del libro
+    document.addEventListener("click", function (event) {
+        if (event.target && event.target.dataset.cabañaId) 
+            event.stopPropagation();
+            var cabañaId = event.target.dataset.cabañaId;
+
+            loadCabañaDetails(cabañaId);
+
+            
+
+        }
+    );
+
+</script>
+
+
+
+<!-- Alerta delete cabaña -->
+<script>
+    document.querySelectorAll('.deleteBtn').forEach(function(deleteBtn) {
+    deleteBtn.addEventListener('click', function (event) {
+        event.preventDefault(); 
+
+        swal({
+            title: "Estás seguro que deseas eliminar?",            
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {                
+                window.location.href = this.getAttribute('href');              
+            }
+        });
+    });
+});
+</script>
+
+{% if messages %}
+    {% for message in messages %}
+        <script>
+            swal({                
+                text: "{{ message }}",
+                icon: "{{ message.tags }}",
+                button: "OK",
+            });
+        </script>
+    {% endfor %}
+{% endif %}
+<
+{%endblock%}
