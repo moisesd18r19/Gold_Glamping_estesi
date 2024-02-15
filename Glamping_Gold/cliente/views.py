@@ -40,7 +40,7 @@ def delete_cliente(request, cliente_id):
         cliente.delete()        
         messages.success(request, 'Cliente eliminado correctamente.')
     except:
-        messages.error(request, 'No se puede eliminar el autor porque está asociado a un libro.')
+        messages.error(request, 'No se puede eliminar el cliente porque está asociado a una reserva.')
     return redirect('cliente')
 
 def edit_cliente(request, cliente_id):
