@@ -9,4 +9,6 @@ class Reserva(models.Model):
     cliente = models.ForeignKey('cliente.Cliente', on_delete= models.DO_NOTHING)
 
 
-# Create your models here.
+    def __str__(self):
+        return self.id
+

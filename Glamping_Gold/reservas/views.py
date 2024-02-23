@@ -24,17 +24,17 @@ def create_reserva(request):
     cabañas_list = Cabaña.objects.all()
     servicios_list = Servicio.objects.all()
     
-    if request.method == 'POTS':
+    if request.method == 'POST':
         fecha_inicio_str = request.POST['fecha_inicio']
         fecha_fin_str = request.POST['fecha_fin']
-        fecha_inicio = datetime.strptime(fecha_inicio_str, '%Y-%M-%D')
-        fecha_fin = datetime.strptime(fecha_fin_str, '%Y-%M-%D')
+        fecha_inicio = datetime.strptime(fecha_inicio_str, '%Y-%m-%d')
+        fecha_fin = datetime.strptime(fecha_fin_str, '%Y-%m-%d')
         
         reserva = Reserva.objects.create(
             fecha_reserva = datetime.now().date(),
             fecha_inicio = fecha_inicio,
             fecha_fin = fecha_fin,
-            valor = request.POST['valortotal'],
+            valor = request.POST['totalValue'],
             estado = 'Reservado',
             cliente_id = request.POST['cliente']       
         )
@@ -45,16 +45,26 @@ def create_reserva(request):
         servicios_id = request.POST.getlist('servicioId[]')
         servicios_precio = request.POST.getlist('servicio_precio[]')
         
-        for i in range(len(cabañas_id)):
-            cabaña = Cabaña.objects.get(pk=(servicios_id [i]))
-            reserva_servicio = Reserva_servicio.objects.create(
-                cabaña = cabaña,
-                servicio = servicio,
-                valor = cabañas_precio[i]
-            )
+        for cabaña_id, precio in zip(cabañas_id, cabañas_precio):
+            cabaña = Cabaña.objects.get(pk=cabaña_id)
+            reservas_cabañas = reservas_cabañas.objects.create(
+                reserva=reserva,
+                cabaña=cabaña,
+                valor=precio
+        )
             reservas_cabañas.save()
-        messages.success(request, 'Reserva creada con éxito.')
-        return redirect('reservas')
+    
+        for servicio_id, precio in zip(servicios_id, servicios_precio):
+            servicio = Servicio.objects.get(pk=servicio_id)
+            reserva_servicio =Reserva_servicio.objects.create(
+                reserva=reserva,
+                servicio=servicio,
+                valor=precio
+        )
+            reserva_servicio.save()       
+            messages.success(request, 'Reserva creada con éxito.')
+            return redirect('reservas')
+
     return render(request, 'reservas/create.html',{'cliente_list':cliente_list, 'cabañas_list':cabañas_list, 'servicios_list':servicios_list})
 
 def detail_reserva(request, reserva_id):
@@ -72,4 +82,3 @@ def delete_reserva(request, reserva_id):
     except:
         messages.error(request, 'No se puede eliminar la reserva porque está asociado a otra tabla.')
     return redirect('reservas')
-# Create your views here.
