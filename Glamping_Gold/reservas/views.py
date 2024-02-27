@@ -66,6 +66,7 @@ def create_reserva(request):
             return redirect('reservas')
 
     return render(request, 'reservas/create.html',{'cliente_list':cliente_list, 'cabañas_list':cabañas_list, 'servicios_list':servicios_list})
+   
 
 def detail_reserva(request, reserva_id):
     reserva = Reserva.objects.get(pk=reserva_id)

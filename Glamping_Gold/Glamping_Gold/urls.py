@@ -26,9 +26,11 @@ urlpatterns = [
     path('clientes/', include('cliente.urls')),
     path('servicios/', include('servicios.urls')),
     path('cabañas/' , include('cabañas.urls')),
-    path('reservas/', include('reservas.urls')),
+    path('reservas/', include('reservas.urls')),    
     path('pagos/', include('pagos.urls')),
     path('login/', views.login, name='login'),
+    path('landing/', views.landing, name='landing'),
+    path('logout/', views.logout, name='logout'),
     path('register/', views.register, name='register'),
     
     
