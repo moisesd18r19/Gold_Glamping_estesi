@@ -31,7 +31,7 @@
                     <td>{{ pago.fecha }}</td>
                     <td>{{ pago.metodo_pago }}</td>
                     <td>{{ pago.valor }}</td>
-                    <td>{{ pago.reserva }}</td>
+                    <td>{{ pago.reservas }}</td>
                     <!-- Toggle Switch button -->
                     <td>
                         <form action="{% url 'pago_status' pago.id %}" method="POST">
