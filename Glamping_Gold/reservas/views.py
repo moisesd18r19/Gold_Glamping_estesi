@@ -7,12 +7,13 @@ from reservas.forms import ReservaForm
 from django.http import JsonResponse
 from pagos.models import Pago
 from reservas_servicios.models import Reserva_servicio
+from reservas_cabañas.models import Reserva_cabaña
 from servicios.models import Servicio
-from reservas_cabañas.models import reservas_cabañas
 from cliente.models import Cliente
 from cabañas.models import Cabaña
 from datetime import datetime
 from django.contrib import messages
+
 
 
 def reservas(request):    
@@ -45,36 +46,39 @@ def create_reserva(request):
         servicios_id = request.POST.getlist('servicioId[]')
         servicios_precio = request.POST.getlist('servicio_precio[]')
         
-        for cabaña_id, precio in zip(cabañas_id, cabañas_precio):
-            cabaña = Cabaña.objects.get(pk=cabaña_id)
-            reservas_cabañas = reservas_cabañas.objects.create(
+        for i in range (len(cabañas_id)):
+            cabaña = Cabaña.objects.get(pk=int(cabañas_id[i]))
+            reserva_cabaña = Reserva_cabaña.objects.create(
                 reserva=reserva,
                 cabaña=cabaña,
-                valor=precio
+                valor=cabañas_precio[i]
         )
-            reservas_cabañas.save()
+            reserva_cabaña.save()
     
-        for servicio_id, precio in zip(servicios_id, servicios_precio):
-            servicio = Servicio.objects.get(pk=servicio_id)
-            reserva_servicio =Reserva_servicio.objects.create(
-                reserva=reserva,
-                servicio=servicio,
-                valor=precio
-        )
-            reserva_servicio.save()       
-            messages.success(request, 'Reserva creada con éxito.')
-            return redirect('reservas')
+        for i in range(len(servicios_id)):
+          servicio = Servicio.objects.get(pk=int(servicios_id[i]))
+          reserva_servicio = Reserva_servicio.objects.create(
+             reserva=reserva,
+             servicio=servicio,
+             valor=servicios_precio[i]
+          )
+          reserva_servicio.save()
 
-    return render(request, 'reservas/create.html',{'cliente_list':cliente_list, 'cabañas_list':cabañas_list, 'servicios_list':servicios_list})
+# Redireccionar fuera del bucle
+        messages.success(request, 'Reserva creada con éxito.')
+        return redirect('reservas')
+
+
+    return render(request, 'reservas/create.html',{'clientes_list':cliente_list, 'cabañas_list':cabañas_list, 'servicios_list':servicios_list})
    
 
 def detail_reserva(request, reserva_id):
     reserva = Reserva.objects.get(pk=reserva_id)
-    reserva_cabaña = reservas_cabañas.objects.filter(reserva=reserva)
-    reserva_servicio = Reserva_servicio.objects.filter(reserva=reserva)
+    reserva_cabaña = Reserva_cabaña.objects.filter(id_reserva=reserva)
+    reserva_servicio = Reserva_servicio.objects.filter(id_reserva=reserva)
     pagos = Pago.objects.filter(reserva=reserva)
-    return render(request, 'reservas/detail.html', {'reserva': reserva, 'reserva_cabañas': reservas_cabañas, 'reserva_servicios': reserva_servicio, 'pagos': pagos})
-  
+    return render(request, 'reservas/detail.html', {'reserva': reserva, 'reserva_cabaña': reserva_cabaña, ' reserva_servicio':  reserva_servicio, 'pagos': pagos})
+    
 def delete_reserva(request, reserva_id):
     reserva = Reserva.objects.get(pk=reserva_id)
     try:
