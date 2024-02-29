@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,6 +47,16 @@ INSTALLED_APPS = [
     'reservas_servicios',
     'reservas_cabañas'
 ]
+
+# Settings jazzmin
+
+JAZZMIN_SETTINGS = {
+    # Logo to use for your site, must be present in static files, used for brand on top left
+    "site_logo": "../static/images/logoadmin.png",
+
+    # Welcome text on the login screen
+    "welcome_sign": "Bienvenido administrador Gold-soft",
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
