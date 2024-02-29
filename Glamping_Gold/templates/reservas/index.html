@@ -37,14 +37,14 @@
                         <td>{{ reserva.cliente}}</td>                        
                         <td>{{ reserva.valor }}</td>
                         <td>{{ reserva.estado }}</td>
-                        <td>                            
+                        <td>                         
                             <a href="{% url 'detail_reserva' reserva.id %}" class="btn btn-info btn-circle btn-sm">
                                 <i class="fas fa-info-circle"></i></a>
                             <a href="" class="btn btn-warning btn-circle btn-sm">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <a href="{% url 'delete_reserva' reserva.id %}" class="btn btn-danger btn-circle btn-sm">
-                                <i class="fas fa-trash"></i>
+                            <a href="{% url 'cancel_reserva' reserva.id %}" class="btn btn-danger btn-circle btn-sm deleteBtn">
+                                <i class="fas fa-times"></i>
                             </a>
                         </td>
                     </tr>
@@ -54,6 +54,33 @@
         </div>
     </div>
 </div>
+<script>
+    document.querySelectorAll('.cancelBtn').forEach(function(cancelBtn) {
+        cancelBtn.addEventListener('click', function (event) {
+            event.preventDefault(); 
+
+            swal({
+                title: "¿Estás seguro que deseas cancelar la reserva?",            
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willCancel) => {
+                if (willCancel) {                
+                    setTimeout(function() {
+                        window.location.href = cancelBtn.getAttribute('href');
+                    }, 2000); // 2000 milliseconds = 2 seconds
+                }
+            })
+            .then(() => {
+                // Mostrar un segundo mensaje de éxito después de la redirección
+                swal("¡Reserva cancelada con éxito!", {
+                    icon: "success",
+                });
+            });
+        });
+    });
+</script>
 
 
 {% endblock %}
