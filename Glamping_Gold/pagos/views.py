@@ -4,6 +4,15 @@ from .forms import  PagoForm
 from django.http import JsonResponse
 from django.contrib import messages
 
+from django.shortcuts import render
+from datetime import datetime
+from django.shortcuts import redirect
+
+from reservas.models import Reserva
+from django.db import models
+from . models import Pago
+
+
 
 def pagos(request):    
     pagos_list = Pago.objects.all()    
@@ -49,5 +58,43 @@ def edit_pago(request, pago_id):
             messages.error(request, 'Ocurrió un error al editar el pago.')
         return redirect('pagos')    
     return render(request, 'pagos/editar.html', {'form': form})
+
+
+def index(request):
+    pagos_list = Pago.objects.all()
+    return render(request, 'pagos/index.html', {'pagos_list': pagos_list})
+
+def pago_reserva(request, id):
+    reserva = Reserva.objects.get(id=id)
+    total_pagos = Pago.objects.filter(reserva_id=id).aggregate(total=models.Sum('amount'))
+    if total_pagos['total'] is not None:
+        total_pagos = total_pagos['total']
+    else:
+        total_pagos = 0    
+    if request.method == 'POST':
+        date_pago = datetime.now().date()
+        amount = request.POST['amount']
+        method = request.POST['method']
+        pago_reserva = request.POST['pago_reserva']
+        pago = Pago.objects.create(
+            date_pago=date_pago,
+            amount=int(amount),
+            method=method,
+            reserva=reserva,
+            status='Confirmado'
+        )
+        try:
+            pago.save()     
+            total_p = Pago.objects.filter(reserva_id=id).aggregate(total=models.Sum('amount'))       
+            if  int(total_p['total']) >= (reserva.precio / 2) and int(total_p['total']) < reserva.precio:
+                reserva.status = 'Confirmada'
+            elif int(total_p['total']) >= reserva.precio:
+                reserva.status = 'En ejecución'        
+            reserva.save()
+            return redirect('reservas') 
+        
+        except Exception as e:
+            return redirect('reservas')         
+    return render(request, 'pago.html', {'reserva': reserva, 'total_pagos': total_pagos})
 
 #
