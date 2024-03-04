@@ -8,7 +8,8 @@ class Pago(models.Model):
     reserva = models.ForeignKey('reservas.Reserva', on_delete= models.DO_NOTHING)
     
     def __str__(self):
-        return self.reserva
+        return str(self.reserva)
+        
 
 
     
