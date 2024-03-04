@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 
 {% block title %}Glamping_Gold{% endblock %}
@@ -15,11 +16,11 @@
             </div>
             <div class="mb-3 mr-5">
                 <label for="" class="form-label">Fecha reserva</label>
-                <input type="text" class="form-control" value='{{reserva.date_reserva|date:"d/m/Y"}}' readonly />
+                <input type="text" class="form-control" value='{{reserva.fecha_reserva|date:"d/m/Y"}}' readonly />
             </div>
             <div class="mb-3 mr-5">
                 <label for="" class="form-label">Documento Cliente</label>
-                <input type="text" class="form-control" value="{{reserva.cliente.document}}" readonly />
+                <input type="text" class="form-control" value="{{reserva.cliente.documento}}" readonly />
             </div>
             <div class="mb-3">
                 <label for="" class="form-label">Nombre Cliente</label>
@@ -45,23 +46,23 @@
             </div>
         </div>
         <div class="table-responsive">
-            <h5 class="text-primary font-weight-bold mt-4">Cabañas reservadas</h5>
+            <h5 class="text-primary font-weight-bold mt-4">cabañas reservadas</h5>
             <table class="table table-bordered" width="100%" cellspacing="0">
                 <thead class="table-dark">
                     <tr>
                         <th>Imagen</th>
-                        <th>Código libro</th>
-                        <th>Título</th>
-                        <th>Valor</th>
+                        <th>nombre</th>
+                        <th>descripcion</th>
+                        <th>Precio</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for cabaña in reserva_cabañas %}
                     <tr>
                         <td><img src="{{ cabaña.cabaña.image.url}}" alt="" width="50"></td>
-                        <td>{{ cabaña.cabaña.code }}</td>
-                        <td>{{ cabaña.cabaña.title }}</td>
-                        <td>{{ cabaña.price}}</td>                        
+                        <td>{{ cabaña.cabaña.nombre }}</td>
+                        <td>{{ cabaña.cabaña.descripcion }}</td>
+                        <td>{{ cabaña.precio}}</td>                        
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -84,9 +85,9 @@
                     <tr>
                         <td><img src="{{ servicio.servicio.image.url}}" alt="" width="50"></td>
                         <td>{{ servicio.servicio.id }}</td>
-                        <td>{{ servicio.servicio.name }}</td>
-                        <td>{{ servicio.servicio.description }}</td>
-                        <td>{{ servicio.price}}</td>                        
+                        <td>{{ servicio.servicio.nombre }}</td>
+                        <td>{{ servicio.servicio.descripcion }}</td>
+                        <td>{{ service.valor}}</td>                        
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -108,9 +109,9 @@
                     {% for pago in pagos %}
                     <tr>
                         <td>{{ pago.id }}</td>
-                        <td>{{ pago.fecha_pago|date:"d/m/Y" }}</td>
-                        <td>{{ pago.method }}</td>
-                        <td>{{ pago.value }}</td>
+                        <td>{{ pago.fecha|date:"d/m/Y" }}</td>
+                        <td>{{ pago.metodo_pago }}</td>
+                        <td>{{ pago.valor }}</td>
                         <td>{{ pago.status }}</td>                       
                     </tr>
                     {% endfor %}

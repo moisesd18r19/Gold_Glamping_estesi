@@ -1,99 +1,86 @@
 {% load static %}
-
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es">
 <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content="" />
+    <meta name="author" content="" />
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>Register</title>
+    <title></title>
 
     <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css" />
     <link
-        href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css"
-        rel="stylesheet">
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet"
+    />
 
     <!-- Custom styles for this template-->
-    <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet" />
 
-    
-    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
 
-<div class="container">
+<body class="bg-gradient-primary">
     <div class="">
-        <a href="{% url 'landing' %}" class="btn p-2 ml-4 mt-4">
-            <i class="fa fa-home"></i>
+        <a href="{% url 'landing' %}" class="btn btn-primary p-2 ml-4 mt-4">
+            <i class="fa fa-home "></i>
         </a>
         
     </div>
+<div class="container ">
+
+
 
     <div class="card o-hidden border-0 shadow-lg my-5">
         <div class="card-body p-0">
+            
             <!-- Nested Row within Card Body -->
             <div class="row">
+
                 <div class="col-lg-6">
-                    <img class="image-sanroque img-fluid mt-5 ml-4 " src="../static/images/san roque.jpg" alt="">
+                    <img src="{% static 'images\d47ufdrn.png' %}" class="img-fluid" alt="">
                 </div>
-                <div class="col-lg-6 ">
+                <div class="col-lg-6">
                     <div class="p-5">
                         <div class="text-center">
-                            <h1 class="h3 text-gray-900 mb-5">Crea tu cuenta</h1>
+                            <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
                         </div>
-                        <form class="user">
-                            <div class="form-group">
-                                <input type="text" class="form-control form-control-user" id="exampleFirstName"
-                                    placeholder="Nombre">
+                        <form class="user" method="post">
+                            {% csrf_token %} {% for field in form %}
+                            <div class="mb-3">
+                                <label for="" class="form-label">{{field.label}}</label>
+                                <input
+                                        type="{{field.field.widget.input_type}}"
+                                        class="form-control"
+                                        name="{{field.name}}"
+                                        id=""
+                                        aria-describedby="helpId"
+                                        placeholder="{{field.field.widget.attrs.placeholder}}"
+                                        value="{{field.value | default:'' }}"
+                                />
+                                <small id="helpId" class="form-text text-danger"
+                                >{{field.errors}}</small
+                                >
                             </div>
-                            <div class="form-group">
-                                <input type="number" class="form-control form-control-user"
-                                    id="number" placeholder="Celular">
-                            </div>
-                            <div class="form-group">
-                                <input type="number" class="form-control form-control-user"
-                                    id="number" placeholder="Documento">
-                            </div>
-                            <div class="form-group">
-                                <input type="email" class="form-control form-control-user"
-                                    id="email" placeholder="Correo electronico">
-                            </div>
-                            <div class="form-group">
-                                <input type="password" class="form-control form-control-user"
-                                    id="exampleInputPassword" placeholder="Contraseña">
-                            </div>
-                            <a href="login.html" class="btn btn-primary btn-user btn-block">
-                                Registrar Cuenta
-                            </a>
+                            {% endfor %}
+
+                            <button
+                                    type="submit"
+                                    class="btn btn-primary btn-user btn-block"
+                            >
+                                Register Account
+                            </button>
                         </form>
-                        <div class="text-center">
-                            <a class="small" href="{% url 'login' %}">Ya tienes una cuenta? Login</a>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
-
 </body>
-
 </html>

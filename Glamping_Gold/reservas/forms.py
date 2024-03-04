@@ -7,12 +7,12 @@ class ReservaForm(forms.ModelForm):
     class Meta:
         model = Reserva
         fields = "__all__"
-        exclude = ['status']
+        exclude = ['estado']
         labels = {
            'fecha_reserva' : 'Fecha de la reserva',
            'fecha_inicio' : 'Fecha de inicio',
            'fecha_fin' : 'Fecha fin',
-           'valor' : 'Valor',
+           'precio' : 'Precio',
            'cliente' : 'Cliente',
            
                                         
@@ -21,7 +21,7 @@ class ReservaForm(forms.ModelForm):
             'fecha_reserva' : forms. DateInput(attrs={'type': 'date'}),
             'fecha_inicio' : forms.DateInput(attrs={'type':'date'}),
             'fecha_fin' : forms.DateInput(attrs={'type':'date'}),
-            'valor' : forms.NumberInput(attrs={'placeholder':'Ingrese valor'}),
+            'precio' : forms.NumberInput(attrs={'placeholder':'Ingrese precio'}),
             'cliente' : forms.SelectMultiple(attrs={'placeholder':'Ingrese cliente'})
              
             
