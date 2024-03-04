@@ -7,7 +7,7 @@ class Reserva_cabaña(models.Model):
     valor = models.IntegerField()
 
     def __str__(self):
-        return (self.id) 
+        return (self.valor) 
 
 # Create your models here.
     

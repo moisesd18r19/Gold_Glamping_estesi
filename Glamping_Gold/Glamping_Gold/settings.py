@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,6 +47,10 @@ INSTALLED_APPS = [
     'reservas_servicios',
     'reservas_cabañas'
 ]
+
+# Settings jazzmin
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
