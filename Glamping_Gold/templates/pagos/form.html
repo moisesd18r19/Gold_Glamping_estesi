@@ -8,7 +8,7 @@
       <select class="form-control" name="{{field.name}}" id="">
           {% for choice in field.field.choices %}
               <option value="{{choice.0}}">{{choice.1}}</option>
-          {% endfor %}x
+          {% endfor %}
       </select>
       {% else %}
       <input type="{{field.field.widget.input_type}}"

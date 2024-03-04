@@ -10,5 +10,6 @@ class Reserva(models.Model):
 
 
     def __str__(self):
-        return self.id
+        return f"Reserva #{self.id} - Cliente: {self.cliente}, Fecha de inicio: {self.fecha_inicio}, Fecha de fin: {self.fecha_fin}"
+
 
