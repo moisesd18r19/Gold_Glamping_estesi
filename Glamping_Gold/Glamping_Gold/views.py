@@ -1,11 +1,20 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.models import User
+from django.urls import reverse_lazy
 from cabañas.models import Cabaña
 from Glamping_Gold.forms import RegisterForm
 from cliente.models import Cliente
 from django.contrib.auth.models import Group
+from django.http import HttpResponse, HttpResponseRedirect
+from django.views import View
 
+import os
+from django.conf import settings
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.contrib.staticfiles import finders
 
 
 def index(request):
@@ -67,3 +76,22 @@ def register(request):
                     return redirect('login')               
             return redirect('login')    
     return render(request, 'register.html', {'form': form})
+
+
+class Pdfview(View):
+      def get(self, request, *args, **kwargs):
+        try:
+            template = get_template('pdf/invoice.html')
+            context = {
+                'title': 'Mi primer Pdf'}
+            html = template.render(context)
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+            pisa_status = pisa.CreatePDF(
+                html, dest=response,)
+            return response
+        except:
+            pass
+        return HttpResponseRedirect(reverse_lazy('erp:Pagos'))
+    
+    

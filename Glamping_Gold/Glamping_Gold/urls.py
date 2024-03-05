@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from . import views
+from .views import Pdfview
 
 
 urlpatterns = [
@@ -32,6 +33,8 @@ urlpatterns = [
     path('', views.landing, name='landing'),
     path('logout/', views.logout, name='logout'),
     path('register/', views.register, name='register'),
+    path('Pdfview/<int:pk>/', Pdfview.as_view(), name='Pdfview'),
+    
     
     
     

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% block content %}
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h4 class="m-0 font-weight-bold text-primary">Detalle reserva</h4>
+    </div>
+    <div class="card-body">
+        <div class="d-flex">
+            <div class="mb-3 mr-5">
+                <label for="" class="form-label">Código reserva</label>
+                <input type="text" class="form-control" value="{{reserva.id}}" readonly />
+            </div>
+            <div class="mb-3 mr-5">
+                <label for="" class="form-label">Fecha reserva</label>
+                <input type="text" class="form-control" value='{{reserva.fecha_reserva|date:"d/m/Y"}}' readonly />
+            </div>
+            <div class="mb-3 mr-5">
+                <label for="" class="form-label">Documento Cliente</label>
+                <input type="text" class="form-control" value="{{reserva.cliente.documento}}" readonly />
+            </div>
+            <div class="mb-3">
+                <label for="" class="form-label">Nombre Cliente</label>
+                <input type="text" class="form-control" value="{{reserva.cliente}}" readonly />
+            </div>
+        </div>
+        <div class="d-flex">
+            <div class="mb-3 mr-5">
+                <label for="" class="form-label">Fecha inicio</label>
+                <input type="text" class="form-control" value='{{reserva.fecha_inicio|date:"d/m/Y"}}' readonly />
+            </div>
+            <div class="mb-3 mr-5">
+                <label for="" class="form-label">Fecha fin</label>
+                <input type="text" class="form-control" value='{{reserva.fecha_fin|date:"d/m/Y"}}' readonly />
+            </div>
+            <div class="mb-3 mr-5">
+                <label for="" class="form-label">Valor</label>
+                <input type="text" class="form-control" value="{{reserva.valor}}" readonly />
+            </div>
+            <div class="mb-3">
+                <label for="" class="form-label">Estado</label>
+                <input type="text" class="form-control" value="{{reserva.estado}}" readonly />
+            </div>
+        </div>
+        <div class="table-responsive">
+            <h5 class="text-primary font-weight-bold mt-4">cabañas reservadas</h5>
+            <table class="table table-bordered" width="100%" cellspacing="0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Imagen</th>
+                        <th>nombre</th>
+                        <th>descripcion</th>
+                        <th>Precio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cabaña in reserva_cabañas %}
+                    <tr>
+                        <td><img src="{{ cabaña.cabaña.image.url}}" alt="" width="50"></td>
+                        <td>{{ cabaña.cabaña.nombre }}</td>
+                        <td>{{ cabaña.cabaña.descripcion }}</td>
+                        <td>{{ cabaña.precio}}</td>                        
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>            
+        </div>
+        <div class="table-responsive">
+            <h5 class="text-primary font-weight-bold mt-4">Servicios reservados</h5>
+            <table class="table table-bordered" width="100%" cellspacing="0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Imagen</th>
+                        <th>Código servicio</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for servicio in reserva_servicios %}
+                    <tr>
+                        <td><img src="{{ servicio.servicio.image.url}}" alt="" width="50"></td>
+                        <td>{{ servicio.servicio.id }}</td>
+                        <td>{{ servicio.servicio.nombre }}</td>
+                        <td>{{ servicio.servicio.descripcion }}</td>
+                        <td>{{ service.valor}}</td>                        
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>            
+        </div>
+        <div class="table-responsive">
+            <h5 class="text-primary font-weight-bold mt-4">Pagos realizados</h5>
+            <table class="table table-bordered" width="100%" cellspacing="0">
+                <thead class="table-dark">
+                    <tr>                        
+                        <th>Código servicio</th>
+                        <th>Fecha</th>
+                        <th>Método</th>
+                        <th>Valor</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pago in pagos %}
+                    <tr>
+                        <td>{{ pago.id }}</td>
+                        <td>{{ pago.fecha|date:"d/m/Y" }}</td>
+                        <td>{{ pago.metodo_pago }}</td>
+                        <td>{{ pago.valor }}</td>
+                        <td>{{ pago.status }}</td>                       
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+    
+</body>
+</html>
