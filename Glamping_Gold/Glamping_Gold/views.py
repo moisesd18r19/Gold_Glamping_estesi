@@ -1,11 +1,23 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.models import User
+from django.urls import reverse_lazy
 from cabañas.models import Cabaña
 from Glamping_Gold.forms import RegisterForm
 from cliente.models import Cliente
 from django.contrib.auth.models import Group
+from django.http import HttpResponse, HttpResponseRedirect
+from django.views import View
+from reservas.models import Reserva
+from reservas_cabañas.models import Reserva_cabaña
+from reservas_servicios.models import Reserva_servicio
 
+import os
+from django.conf import settings
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.contrib.staticfiles import finders
 
 
 def index(request):
@@ -67,3 +79,39 @@ def register(request):
                     return redirect('login')               
             return redirect('login')    
     return render(request, 'register.html', {'form': form})
+
+
+class Pdfview(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            # Obtener la reserva (puedes obtenerla según los parámetros de la URL o de algún otro lugar)
+            reserva_id = kwargs.get('reserva_id')  # Por ejemplo, si pasas el ID de la reserva en la URL
+            reserva = Reserva.objects.get(pk=reserva_id)
+            
+            # Obtener las cabañas reservadas y servicios reservados para esta reserva
+            cabañas_reservadas = Reserva_cabaña.objects.filter(id_reserva=reserva)
+            servicios_reservados = Reserva_servicio.objects.filter(id_reserva=reserva)
+            
+            # Pasar los datos al contexto
+            context = {
+                'title': 'Detalle de reserva',
+                'reserva': reserva,
+                'cabañas_reservadas': cabañas_reservadas,
+                'servicios_reservados': servicios_reservados,
+            }
+            
+            # Renderizar la plantilla
+            template = get_template('pdf/invoice.html')
+            html = template.render(context)
+            
+            # Crear la respuesta PDF
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+            pisa_status = pisa.CreatePDF(html, dest=response)
+            
+            return response
+        except Exception as e:
+            # Manejar la excepción apropiadamente
+            print(str(e))
+            return HttpResponse("Ocurrió un error al generar el PDF.")
+        
