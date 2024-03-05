@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.models import User
+from cabañas.models import Cabaña
 from Glamping_Gold.forms import RegisterForm
 from cliente.models import Cliente
 from django.contrib.auth.models import Group
@@ -16,8 +17,9 @@ def login(request):
 def register(request):
     return render (request, 'register.html')
 
-def landing(request):
-    return render(request, 'landing.html')
+def landing(request):    
+    cabañas_lan = Cabaña.objects.filter(status=True)   
+    return render(request, 'landing.html', {'cabañas_lan': cabañas_lan})
 
 def login(request):
     error = None

@@ -1,5 +1,5 @@
 from django.db import models
-
+from tipocabañas.models import Tipocabaña
 
 class Cabaña(models.Model):
     nombre= models.CharField(max_length=50)

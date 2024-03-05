@@ -369,114 +369,25 @@
         </div>
       </div>
       <div class="row">
+        {% for cabaña in cabañas_lan %}
         <div class="col-lg-4 col-md-6">
           <div class="item">
-            <a href="property-details.html"><img src="../static/images/calido_rincon.jpg" alt=""></a>
-            <span class="category">Madera</span>
-            <h6>$464.000</h6>
-            <h4><a href="property-details.html">Calido Rincón</a></h4>
+            <a href=""><img src="{{ cabaña.imagen.url }}" alt=""></a>
+            <span class="category">{{ cabaña.tipocabaña.nombre }}</span>
+            <h6>$ {{ cabaña.precio }}</h6>
+            <h4><a href="#">{{ cabaña.nombre }}</a></h4>
             <ul>
-              <li>Habitaciones: <span>2</span></li>
-              <li>Capacidad: <span>6</span></li>
-              <li>Espacio: <span>55 m2</span></li>
-              <li>Habitaciones: <span>2</span></li>
+              <li>Capacidad: <span>{{ cabaña.capacidad }}</span></li>
+              <li>Descripción: <span>{{ cabaña.descripcion }}</span></li>
               <li>Parqueadero: <span>Si</span></li>
+              <li>Chimenea: <span>Si</span></li>
             </ul>
             <div class="main-button">
-              <a href="property-details.html">Reserva esta cabaña</a>
+              <a href="#">Reserva esta cabaña</a>
             </div>
           </div>
         </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="item">
-            <a href="property-details.html"><img src="../static/images/chalet.jpeg" alt=""></a>
-            <span class="category">Chalet</span>
-            <h6>$380.000</h6>
-            <h4><a href="property-details.html">Chalet grande</a></h4>
-            <ul>
-              <li>Habitaciones: <span>2</span></li>
-              <li>Capacidad: <span>4</span></li>
-              <li>Espacio: <span>30m2</span></li>
-              <li>Cocina: <span>Si</span></li>
-              <li>Parqueadero: <span>Si</span></li>
-            </ul>
-            <div class="main-button">
-              <a href="property-details.html">Reserva esta cabaña</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="item">
-            <a href="property-details.html"><img src="../static/images/clasico2.jpg" alt=""></a>
-            <span class="category">Madera</span>
-            <h6>$660.000</h6>
-            <h4><a href="property-details.html">Rincón familiar</a></h4>
-            <ul>
-              <li>Habitaciones: <span>4</span></li>
-              <li>Capacidad: <span>18</span></li>
-              <li>Espacio: <span>105m2</span></li>
-              <li>Parqueadero: <span>4 carros</span></li>
-              <li>Jacuzzi <span>Si</span></li>
-            </ul>
-            <div class="main-button">
-              <a href="property-details.html">Reserva esta cabaña</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="item">
-            <a href="property-details.html"><img src="../static/images/domo.jpg" alt=""></a>
-            <span class="category">Domo</span>
-            <h6>$284.000</h6>
-            <h4><a href="property-details.html">Refugio picarón</a></h4>
-            <ul>
-              <li>Habitaciones: <span>1</span></li>
-              <li>Capacidad: <span>2</span></li>
-              <li>Espacio: <span>18m2</span></li>
-              <li>Parqueadero: <span>Si</span></li>
-              <li>Cocina: <span>Si</span></li>
-            </ul>
-            <div class="main-button">
-              <a href="property-details.html">Reserva esta cabaña</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="item">
-            <a href="property-details.html"><img src="../static/images/iglu.jpg" alt=""></a>
-            <span class="category">Iglú</span>
-            <h6>$325.600</h6>
-            <h4><a href="property-details.html">Refugio glacial</a></h4>
-            <ul>
-              <li>Habitaciones: <span>1</span></li>
-              <li>Capacidad: <span>2</span></li>
-              <li>Espacio: <span>20m2</span></li>
-              <li>Aire acondicionado: <span>Si</span></li>
-              <li>Parqueadero: <span>Si</span></li>
-            </ul>
-            <div class="main-button">
-              <a href="property-details.html">Reserva esta cabaña</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="item">
-            <a href="property-details.html"><img src="../static/images/chalet2.jpg" alt=""></a>
-            <span class="category">Chalet</span>
-            <h6>$270.000</h6>
-            <h4><a href="property-details.html">Chalet Brasa</a></h4>
-            <ul>
-              <li>Habitaciones: <span>1</span></li>
-              <li>Capacidad: <span>2</span></li>
-              <li>Espacio: <span>20m2</span></li>
-              <li>Chimenea <span>Si</span></li>
-              <li>Parqueadero: <span>Si</span></li>
-            </ul>
-            <div class="main-button">
-              <a href="property-details.html">Reserva esta cabaña</a>
-            </div>
-          </div>
-        </div>
+        {% endfor %}
       </div>
     </div>
   </div>
@@ -504,7 +415,7 @@
           <div class="row">
             <div class="col-lg-6">
               <div class="item phone">
-                <img src="assets/images/phone-icon.png" alt="" style="max-width: 52px;">
+                <img src="{% static 'images/phone_icon.png' %}" alt="" style="max-width: 52px;">
                 <h6>010-020-0340<br><span>Phone Number</span></h6>
               </div>
             </div>
