@@ -4,6 +4,8 @@
 
 {% block content %}
 <div class="card shadow mb-4 p-4 ">
+    <h4 class="m-0 font-weight-bold text-primary">Editar reserva</h4>
+    <br>
     <div class="card-header py-3 mb-3">
         <h4 class="m-0 font-weight-bold text-primary">Reserva de cabañas y servicios</h4>
     </div>
@@ -13,19 +15,20 @@
             <div class="mb-3">
                 <label for="" class="form-label">Fecha inicio</label>
                 <input type="date" class="form-control" name="fecha_inicio" id="fecha_inicio" aria-describedby="helpId"
-                    placeholder="Ingresa una fecha de inicio">
+                    placeholder="Ingresa una fecha de inicio" value="{{ reserva.fecha_inicio|date:'Y-m-d' }}">
                 <small id="helpId" class="form-text text-muted"></small>
             </div>
             <div class="mb-3 mx-4">
                 <label for="" class="form-label">Fecha final</label>
                 <input type="date" class="form-control" name="fecha_fin" id="fecha_fin" aria-describedby="helpId"
-                    placeholder="Ingresa una fecha de inicio">
+                    placeholder="Ingresa una fecha de inicio" value="{{ reserva.fecha_fin|date:'Y-m-d' }}">
                 <small id="helpId" class="form-text text-muted"></small>
             </div>
         </div>
         <div class="mb-3">
             <label for="" class="form-label">cliente</label>
-            <select class="form-control" name="cliente" id="">
+            <select class="form-control" name="cliente" id=""
+                placeholder="Selecciona un cliente" value="{{cliente.nombre}}"
                 <option value="">Selecciona un cliente</option>
                 {% for cliente in cliente_list %}
                 <option value="{{cliente.id}}">{{cliente.nombre}}</option>
@@ -35,7 +38,8 @@
         <div class="mb-3">
             <label for="" class="form-label">Cabaña</label>
             <div class="d-flex">
-                <select class="form-control" name="cabaña" id="">
+                <select class="form-control" name="cabaña" id=""
+                    placeholder="Selecciona una cabaña" value="{{cabaña.nombre}}"                   
                     <option value="">Selecciona una cabaña</option>
                     {% for cabaña in cabañas_list %}
                     <option value="{{cabaña.id}}">{{cabaña.nombre}} - {{cabaña.precio}}</option>
@@ -49,7 +53,8 @@
         <div class="mb-3">
             <label for="" class="form-label">Servicio</label>
             <div class="d-flex">
-                <select class="form-control" name="servicio" id="">
+                <select class="form-control" name="servicio" id=""
+                placeholder="Selecciona un servicio" value="{{servicio.nombre}}"
                     <option value="">Selecciona un servicio</option>
                     {% for servicio in servicios_list %}
                     <option value="{{servicio.id}}">{{servicio.nombre}} - {{servicio.precio}}</option>
