@@ -48,8 +48,6 @@ INSTALLED_APPS = [
     'reservas_cabañas'
 ]
 
-# Settings jazzmin
-
 
 
 MIDDLEWARE = [

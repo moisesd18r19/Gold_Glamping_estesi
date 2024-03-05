@@ -1,11 +1,13 @@
 from django.shortcuts import get_object_or_404, render, redirect
+
+from django.http import HttpResponseRedirect
 from servicios.models import Servicio
 from .models import Reserva
 from reservas.forms import Reserva
 from pagos.models import Pago
 from reservas_servicios.models import Reserva_servicio
-from reservas_cabañas.models import Reserva_cabaña
 from servicios.models import Servicio
+from reservas_cabañas.models import Reserva_cabaña
 from cliente.models import Cliente
 from cabañas.models import Cabaña
 from datetime import datetime
@@ -15,11 +17,9 @@ from django.urls import reverse
 from datetime import datetime
 
 
-
 def reservas(request):    
     reservas_list = Reserva.objects.all()    
     return render(request, 'reservas/index.html', {'reservas_list': reservas_list})
-
 
 
 def create_reserva(request):
@@ -37,59 +37,54 @@ def create_reserva(request):
             fecha_reserva=datetime.now().date(),
             fecha_inicio=fecha_inicio,
             fecha_fin=fecha_fin,
-            valor=request.POST['totalValue'],
+            precio=request.POST['totalValue'],
             estado='Reservado',
             cliente_id=request.POST['cliente']       
         )
         
         reserva.save()
-        cabañas_id = request.POST.getlist('cabañaId[]')
-        cabañas_precio = request.POST.getlist('cabaña_precio[]')
-        servicios_id = request.POST.getlist('servicioId[]')
-        servicios_precio = request.POST.getlist('servicio_precio[]')
         
-
-        for i in range (len(cabañas_id)):
-            cabaña = Cabaña.objects.get(pk=int(cabañas_id[i]))
+        id_cabaña = request.POST.getlist('cabañaId[]')
+        cabañas_precio = request.POST.getlist('cabañaprecio[]')
+        id_servicio= request.POST.getlist('servicioId[]')
+        servicios_precio = request.POST.getlist('servicioPrecio[]')
+        
+        for i in range(len(id_cabaña)):            
+            cabaña = Cabaña.objects.get(pk=int(id_cabaña[i]))
             reserva_cabaña = Reserva_cabaña.objects.create(
-                reserva=reserva,
-                cabaña=cabaña,
-                valor=cabañas_precio[i]
-        )
+                id_reserva=reserva,
+                id_cabaña=cabaña,
+                precio_C=cabañas_precio[i]
+            )
             reserva_cabaña.save()
-    
-        for i in range(len(servicios_id)):
-          servicio = Servicio.objects.get(pk=int(servicios_id[i]))
-          reserva_servicio = Reserva_servicio.objects.create(
-             reserva=reserva,
-             servicio=servicio,
-             valor=servicios_precio[i]
-          )
-          reserva_servicio.save()
-        messages.success(request, 'Reserva creada con éxito.')
-        return redirect('reservas')
-    return render(request, 'reservas/create.html',{'clientes_list':cliente_list, 'cabañas_list':cabañas_list, 'servicios_list':servicios_list})
-   
-       
 
-def detail_Reserva(request, reserva_id):
+    
+        for i in range(len(id_servicio)):            
+            servicio = Servicio.objects.get(pk=int(id_servicio[i]))
+            reserva_servicio = Reserva_servicio.objects.create(
+                id_reserva=reserva,
+                id_servicio=servicio,
+                precio_S=servicios_precio[i]
+            )
+            reserva_servicio.save()
+
+        
+        ## messages.success(request, 'Reserva creada con éxito.')
+        return HttpResponseRedirect(reverse('reservas'))
+
+    return render(request, 'reservas/create.html',{'cliente_list':cliente_list, 'cabañas_list':cabañas_list, 'servicios_list':servicios_list})
+
+
+def detail_reserva(request, reserva_id):
     reserva = Reserva.objects.get(pk=reserva_id)
-    reserva_cabañas = Reserva_cabaña.objects.filter(id_reserva=reserva)
-    reserva_servicios = Reserva_servicio.objects.filter(id_reserva=reserva)
-    print(reserva_cabañas)
-    print(reserva_servicios)
+    reserva_cabaña = Reserva_cabaña.objects.filter(reserva=reserva)
+    reserva_servicio = Reserva_servicio.objects.filter(reserva=reserva)
+    pagos = Pago.objects.filter(reserva=reserva)
+    return render(request, 'reservas/detail.html', {'reserva': reserva, 'reserva_cabañas': reserva_cabaña, 'reserva_servicios': reserva_servicio, 'pagos': pagos})
 
-    pagos = Pago.objects.filter(reserva=reserva)  # Corregido aquí
-    return render(request, 'reservas/detail.html', {'reserva': reserva, 'reserva_cabañas': reserva_cabañas, 'reserva_servicios': reserva_servicios, 'pagos': pagos})
-
-    
 def cancel_reserva(request, reserva_id):
     reserva = get_object_or_404(Reserva, pk=reserva_id)
     reserva.estado = 'Cancelada'
     reserva.save()
     messages.success(request, 'Reserva cancelada correctamente.')
-
     return redirect('reservas')
-
-
-

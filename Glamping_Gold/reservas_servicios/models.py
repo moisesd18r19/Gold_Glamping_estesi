@@ -4,7 +4,7 @@ from django.db import models
 class Reserva_servicio(models.Model):
     id_reserva = models.ForeignKey('reservas.Reserva', on_delete=models.DO_NOTHING)
     id_servicio = models.ForeignKey('servicios.Servicio', on_delete=models.DO_NOTHING)
-    valor = models.IntegerField()
+    precio_S = models.IntegerField()
 
     def __str__(self):
-        return (self.id) 
+        return (self.id_reserva) 
