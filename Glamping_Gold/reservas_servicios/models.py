@@ -6,5 +6,3 @@ class Reserva_servicio(models.Model):
     id_servicio = models.ForeignKey('servicios.Servicio', on_delete=models.DO_NOTHING)
     precio_S = models.IntegerField()
 
-    def __str__(self):
-        return (self.id_reserva) 

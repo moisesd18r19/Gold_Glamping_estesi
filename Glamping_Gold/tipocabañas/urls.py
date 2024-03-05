@@ -9,6 +9,8 @@ urlpatterns = [
     path('detail/<int:tipocabaña_id>/', views.detail_tipocabaña, name='detail_tipocabaña'),
     path('delete/<int:tipocabaña_id>/', views.delete_tipocabaña, name='delete_tipocabaña'),  
     path('edit/<int:tipocabaña_id>/', views.edit_tipocabaña, name='edit_tipocabaña'),  
+    
+    # path("lista_tipocabaña/", views.lista_tipocabaña.as_view(), name="lista_tipocabaña")
 ]
          
          

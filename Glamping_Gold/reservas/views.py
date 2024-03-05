@@ -77,11 +77,11 @@ def create_reserva(request):
 
 def detail_reserva(request, reserva_id):
     reserva = Reserva.objects.get(pk=reserva_id)
-    reserva_cabaña = Reserva_cabaña.objects.filter(reserva=reserva)
-    reserva_servicio = Reserva_servicio.objects.filter(reserva=reserva)
+    reserva_cabañas = Reserva_cabaña.objects.filter(id_reserva=reserva)
+    reserva_servicios = Reserva_servicio.objects.filter(id_reserva=reserva)
     pagos = Pago.objects.filter(reserva=reserva)
-    return render(request, 'reservas/detail.html', {'reserva': reserva, 'reserva_cabañas': reserva_cabaña, 'reserva_servicios': reserva_servicio, 'pagos': pagos})
-
+    return render(request, 'reservas/detail.html', {'reserva': reserva, 'reserva_cabañas': reserva_cabañas, 'reserva_servicios': reserva_servicios, 'pagos': pagos})
+    
 def cancel_reserva(request, reserva_id):
     reserva = get_object_or_404(Reserva, pk=reserva_id)
     reserva.estado = 'Cancelada'
