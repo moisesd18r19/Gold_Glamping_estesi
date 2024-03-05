@@ -21,7 +21,7 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name='index'),
+    path('index/', views.index, name='index'),
     path('tipocabañas/', include('tipocabañas.urls')), 
     path('clientes/', include('cliente.urls')),
     path('servicios/', include('servicios.urls')),
@@ -29,7 +29,7 @@ urlpatterns = [
     path('reservas/', include('reservas.urls')),    
     path('pagos/', include('pagos.urls')),
     path('login/', views.login, name='login'),
-    path('landing/', views.landing, name='landing'),
+    path('', views.landing, name='landing'),
     path('logout/', views.logout, name='logout'),
     path('register/', views.register, name='register'),
     

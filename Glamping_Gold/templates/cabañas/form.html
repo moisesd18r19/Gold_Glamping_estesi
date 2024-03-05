@@ -1,4 +1,4 @@
-<form action="" method="POST">
+<form action="" method="POST" enctype="multipart/form-data"> 
   {% csrf_token %}
 
   {% for field in form %}
@@ -10,13 +10,14 @@
                       <option value="{{ choice.0 }}" {% if choice.0 == field.value %}selected{% endif %}>{{ choice.1 }}</option>
                   {% endfor %}
               </select>
-          {% elif field.name == '' %}
-              <input type="{{ field.field.widget.input_type }}"
-                  class="form-control" name="{{ field.name }}" id="{{ field.id_for_label }}"
-                  aria-describedby="helpId" placeholder="{{ field.field.widget.attrs.placeholder }}" 
-                  value="{{ field.value | default:'' | date:'Y-m-d' }}">
-              <small id="helpId" class="form-text text-danger">{{ field.errors }}</small>            
+              {% elif field.name == 'tipocabaña' %}
+              <select class="form-control" name="{{field.name}}" id="">
+                  {% for choice in field.field.choices %}
+                      <option value="{{choice.0}}">{{choice.1}}</option>
+                  {% endfor %}
+              </select>
           {% else %}
+  
               {% if field.name == 'imagen' and field.value %}
               <br>                               
               <img src="{{MEDIA_URL}}/{{field.value}}" width="50">
