@@ -11,6 +11,8 @@ from django.views import View
 from reservas.models import Reserva
 from reservas_cabañas.models import Reserva_cabaña
 from reservas_servicios.models import Reserva_servicio
+from django.template.loader import render_to_string
+from io import BytesIO
 
 import os
 from django.conf import settings
@@ -84,34 +86,27 @@ def register(request):
 class Pdfview(View):
     def get(self, request, *args, **kwargs):
         try:
-            # Obtener la reserva (puedes obtenerla según los parámetros de la URL o de algún otro lugar)
-            reserva_id = kwargs.get('reserva_id')  # Por ejemplo, si pasas el ID de la reserva en la URL
+            reserva_id = kwargs.get('pk')
             reserva = Reserva.objects.get(pk=reserva_id)
+            reserva_cabañas = Reserva_cabaña.objects.filter(id_reserva=reserva)
+            reserva_servicios = Reserva_servicio.objects.filter(id_reserva=reserva)
             
-            # Obtener las cabañas reservadas y servicios reservados para esta reserva
-            cabañas_reservadas = Reserva_cabaña.objects.filter(id_reserva=reserva)
-            servicios_reservados = Reserva_servicio.objects.filter(id_reserva=reserva)
+            # Renderizar el contenido del PDF directamente desde una cadena HTML
+            html = render_to_string('invoice.html', {'reserva': reserva, 'reserva_cabañas': reserva_cabañas, 'reserva_servicios': reserva_servicios})
             
-            # Pasar los datos al contexto
-            context = {
-                'title': 'Detalle de reserva',
-                'reserva': reserva,
-                'cabañas_reservadas': cabañas_reservadas,
-                'servicios_reservados': servicios_reservados,
-            }
+            # Crear un objeto BytesIO para almacenar el PDF
+            buffer = BytesIO()
+            pisa_status = pisa.CreatePDF(html, dest=buffer)
             
-            # Renderizar la plantilla
-            template = get_template('pdf/invoice.html')
-            html = template.render(context)
-            
-            # Crear la respuesta PDF
-            response = HttpResponse(content_type='application/pdf')
-            response['Content-Disposition'] = 'attachment; filename="report.pdf"'
-            pisa_status = pisa.CreatePDF(html, dest=response)
-            
-            return response
-        except Exception as e:
-            # Manejar la excepción apropiadamente
-            print(str(e))
-            return HttpResponse("Ocurrió un error al generar el PDF.")
+            if not pisa_status.err:
+                # Si la generación del PDF fue exitosa, devolver el PDF como respuesta
+                pdf = buffer.getvalue()
+                buffer.close()
+                response = HttpResponse(pdf, content_type='application/pdf')
+                response['Content-Disposition'] = f'attachment; filename="report.pdf"'
+                return response
+        except Reserva.DoesNotExist:
+            pass
         
+        # En caso de excepción o si la reserva no existe, devolver una respuesta vacía con un código de estado 404
+        return HttpResponse(status=404)

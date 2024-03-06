@@ -18,7 +18,6 @@ urlpatterns = [
     path('', views.landing, name='landing'),
     path('logout/', views.logout, name='logout'),
     path('register/', views.register, name='register'),
-
     path('Pdfview/<int:pk>/', Pdfview.as_view(), name='Pdfview'),
     
     
