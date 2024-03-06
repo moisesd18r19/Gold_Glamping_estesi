@@ -1,5 +1,7 @@
+from msilib.schema import ListView
 from django.shortcuts import render
 from django.shortcuts import render, redirect
+from django.views import View
 from tipocabañas.models import Tipocabaña
 from .forms import TipocabañaForm
 from django.contrib import messages
@@ -48,6 +50,15 @@ def edit_tipocabaña(request, tipocabaña_id):
             messages.error(request, 'Ocurrió un error al editar el tipo de cabaña.')
         return redirect('tipocabañas')    
     return render(request, 'tipocabañas/editar.html', {'form': form})
+
+# class lista_tipocabaña(ListView):
+#     model = Tipocabaña
+#     template_nombre = "tipocabañas/index.html"
+#     context_object_nombre = "tipocabañas"
+    
+# class lista_tipocabañapdf(View):
+#     def get(self, request, *args, **kwarts):
+#         tipocabañas = Tipocabaña.objects.all()
 
 
 

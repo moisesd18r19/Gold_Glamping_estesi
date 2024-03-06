@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 
 {% block title %}Glamping_Gold{% endblock %}
@@ -8,7 +7,7 @@
     <div class="card-header py-3">
         <h4 class="m-0 font-weight-bold text-primary">Detalle reserva</h4>
     </div>
-    <div class="card-body">
+        <div class="card-body">
         <div class="d-flex">
             <div class="mb-3 mr-5">
                 <label for="" class="form-label">Código reserva</label>
@@ -24,7 +23,7 @@
             </div>
             <div class="mb-3">
                 <label for="" class="form-label">Nombre Cliente</label>
-                <input type="text" class="form-control" value="{{reserva.cliente}}" readonly />
+                <input type="text" class="form-control" value="{{reserva.cliente.nombre}}" readonly />
             </div>
         </div>
         <div class="d-flex">
@@ -38,7 +37,7 @@
             </div>
             <div class="mb-3 mr-5">
                 <label for="" class="form-label">Valor</label>
-                <input type="text" class="form-control" value="{{reserva.valor}}" readonly />
+                <input type="text" class="form-control" value="{{reserva.precio}}" readonly />
             </div>
             <div class="mb-3">
                 <label for="" class="form-label">Estado</label>
@@ -46,23 +45,22 @@
             </div>
         </div>
         <div class="table-responsive">
-            <h5 class="text-primary font-weight-bold mt-4">cabañas reservadas</h5>
+            <h5 class="text-primary font-weight-bold mt-4">Cabañas reservadas</h5>
             <table class="table table-bordered" width="100%" cellspacing="0">
                 <thead class="table-dark">
                     <tr>
                         <th>Imagen</th>
-                        <th>nombre</th>
-                        <th>descripcion</th>
-                        <th>Precio</th>
+                        <th>Código</th>
+                        <th>Título</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
-                    {% for cabaña in reserva_cabañas %}
+                    {% for reserva in reserva_cabañas %}
                     <tr>
-                        <td><img src="{{ cabaña.cabaña.image.url}}" alt="" width="50"></td>
-                        <td>{{ cabaña.cabaña.nombre }}</td>
-                        <td>{{ cabaña.cabaña.descripcion }}</td>
-                        <td>{{ cabaña.precio}}</td>                        
+                        <td><img src="{{ reserva.id_cabaña.imagen.url }}" alt="" width="50"></td>
+                        <td>{{ reserva.id_cabaña.id }}</td>
+                        <td>{{ reserva.id_cabaña.nombre }}</td>                                               
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -83,11 +81,11 @@
                 <tbody>
                     {% for servicio in reserva_servicios %}
                     <tr>
-                        <td><img src="{{ servicio.servicio.image.url}}" alt="" width="50"></td>
-                        <td>{{ servicio.servicio.id }}</td>
-                        <td>{{ servicio.servicio.nombre }}</td>
-                        <td>{{ servicio.servicio.descripcion }}</td>
-                        <td>{{ service.valor}}</td>                        
+                        <td><img src="{{ servicio.id_servicio.imagen.url }}" alt="" width="50"></td>
+                        <td>{{ servicio.id_servicio.id }}</td>
+                        <td>{{ servicio.id_servicio.nombre }}</td>
+                        <td>{{ servicio.id_servicio.descripcion }}</td>
+                        <td>{{ servicio.id_servicio.precio }}</td>                        
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -112,7 +110,7 @@
                         <td>{{ pago.fecha|date:"d/m/Y" }}</td>
                         <td>{{ pago.metodo_pago }}</td>
                         <td>{{ pago.valor }}</td>
-                        <td>{{ pago.status }}</td>                       
+                        <td>{{ pago.estado }}</td>                       
                     </tr>
                     {% endfor %}
                 </tbody>
