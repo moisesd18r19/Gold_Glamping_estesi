@@ -40,7 +40,7 @@
                         <td>                         
                             <a href="{% url 'detail_reserva' reserva.id %}" class="btn btn-info btn-circle btn-sm">
                                 <i class="fas fa-info-circle"></i></a>
-                            <a href="" class="btn btn-warning btn-circle btn-sm">
+                            <a href="{% url 'edit_reserva' reserva.id %}" class="btn btn-warning btn-circle btn-sm">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <a href="{% url 'cancel_reserva' reserva.id %}" class="btn btn-danger btn-circle btn-sm deleteBtn">

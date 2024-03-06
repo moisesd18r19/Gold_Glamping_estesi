@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle reserva</title>
+
+    <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        .logo {
+            max-width: 150px;
+            margin-bottom: 20px;
+        }
+        .table {
+            margin-top: 20px;
+        }
+        /* Estilos para centrar los datos en la columna de precio */
+        .centrar {
+            text-align: center;
+            align-items: center;
+        }
+    </style>
+
+</head>
+<body>
+    <div>
+        <H1 class="centrar">Gold-soft</H1>
+        <img width="150px" class="centrar" src="../static/images/logo.png" alt="">
+    </div>
+    <br><br><br><br><br><br>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h4 class="m-0 font-weight-bold text-primary">Detalle reserva</h4>
+        </div>
+        <div class="card-body">
+            <div class="d-flex">
+                <div class="mb-3 mr-5">
+                    <label for="" class="form-label">Código reserva</label>
+                    <input type="text" class="form-control" value="{{ reserva.id }}" readonly />
+                </div>
+                
+                <!-- Añade aquí más campos de la reserva según sea necesario -->
+            </div>
+            <div class="card-body">
+                <div class="d-flex">
+                    <div class="mb-3 mr-5">
+                        <label for="" class="form-label">Fecha de inicio</label>
+                        <input type="text" class="form-control" value="{{ reserva.fecha_inicio }}" readonly />
+                    </div>
+                    <div class="mb-3 mr-5">
+                        <label for="" class="form-label">Fecha fin</label>
+                        <input type="text" class="form-control" value="{{ reserva.fecha_fin }}" readonly />
+                    </div>
+                    
+                    <!-- Añade más campos de la reserva según sea necesario -->
+                </div>
+            </div>    
+            <!-- Sección para mostrar las cabañas reservadas -->
+            <div class="table-responsive">
+                <h5 class="text-primary font-weight-bold mt-4">Cabañas reservadas</h5>
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead class="table-dark">
+                        <tr class="centrar">
+                            <th>Nombre cabañas</th>
+                            <th>Precio</th>
+                        </tr>   
+                    </thead>
+                    <tbody>
+                        {% for reserva_cabaña in reserva_cabañas %}
+                        <tr class="centrar">
+                            <td>{{ reserva_cabaña.id_cabaña }}</td> 
+                            <td>{{ reserva_cabaña.precio_C }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- Sección para mostrar los servicios reservados -->
+            <div class="table-responsive">
+                <h5 class="text-primary font-weight-bold mt-4">Servicios reservados</h5>
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead class="table-dark">
+                        <tr class="centrar">
+                            <th>Código servicio</th>
+                            <th>Precio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reserva_servicio in reserva_servicios %}
+                        <tr class="centrar">
+                            <td>{{ reserva_servicio.id_servicio }}</td>
+                            <td>{{ reserva_servicio.precio_S }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

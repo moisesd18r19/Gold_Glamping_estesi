@@ -1,11 +1,25 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.models import User
+from django.urls import reverse_lazy
 from cabañas.models import Cabaña
 from Glamping_Gold.forms import RegisterForm
 from cliente.models import Cliente
 from django.contrib.auth.models import Group
+from django.http import HttpResponse, HttpResponseRedirect
+from django.views import View
+from reservas.models import Reserva
+from reservas_cabañas.models import Reserva_cabaña
+from reservas_servicios.models import Reserva_servicio
+from django.template.loader import render_to_string
+from io import BytesIO
 
+import os
+from django.conf import settings
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.contrib.staticfiles import finders
 
 
 def index(request):
@@ -67,3 +81,32 @@ def register(request):
                     return redirect('login')               
             return redirect('login')    
     return render(request, 'register.html', {'form': form})
+
+
+class Pdfview(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            reserva_id = kwargs.get('pk')
+            reserva = Reserva.objects.get(pk=reserva_id)
+            reserva_cabañas = Reserva_cabaña.objects.filter(id_reserva=reserva)
+            reserva_servicios = Reserva_servicio.objects.filter(id_reserva=reserva)
+            
+            # Renderizar el contenido del PDF directamente desde una cadena HTML
+            html = render_to_string('invoice.html', {'reserva': reserva, 'reserva_cabañas': reserva_cabañas, 'reserva_servicios': reserva_servicios})
+            
+            # Crear un objeto BytesIO para almacenar el PDF
+            buffer = BytesIO()
+            pisa_status = pisa.CreatePDF(html, dest=buffer)
+            
+            if not pisa_status.err:
+                # Si la generación del PDF fue exitosa, devolver el PDF como respuesta
+                pdf = buffer.getvalue()
+                buffer.close()
+                response = HttpResponse(pdf, content_type='application/pdf')
+                response['Content-Disposition'] = f'attachment; filename="report.pdf"'
+                return response
+        except Reserva.DoesNotExist:
+            pass
+        
+        # En caso de excepción o si la reserva no existe, devolver una respuesta vacía con un código de estado 404
+        return HttpResponse(status=404)
