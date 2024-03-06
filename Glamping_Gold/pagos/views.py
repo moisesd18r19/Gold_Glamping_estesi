@@ -14,6 +14,7 @@ from . models import Pago
 
 
 
+
 def pagos(request):    
     pagos_list = Pago.objects.all()    
     return render(request, 'pagos/index.html', {'pagos_list': pagos_list})
@@ -50,7 +51,7 @@ def delete_pago(request, pago_id):
 def edit_pago(request, pago_id):
     pago = Pago.objects.get(pk=pago_id)
     form = PagoForm(request.POST or None, request.FILES or None, instance=pago)
-    if form.is_valid() and request.method == 'POST':
+    if form.is_valid() and request.metodo_pago == 'POST':
         try:
             form.save()
             messages.success(request, 'Pago actualizado correctamente.')
@@ -59,37 +60,36 @@ def edit_pago(request, pago_id):
         return redirect('pagos')    
     return render(request, 'pagos/editar.html', {'form': form})
 
-
 def index(request):
     pagos_list = Pago.objects.all()
     return render(request, 'pagos/index.html', {'pagos_list': pagos_list})
 
 def pago_reserva(request, id):
     reserva = Reserva.objects.get(id=id)
-    total_pagos = Pago.objects.filter(reserva_id=id).aggregate(total=models.Sum('amount'))
+    total_pagos = Pago.objects.filter(reserva_id=id).aggregate(total=models.Sum('valor'))
     if total_pagos['total'] is not None:
         total_pagos = total_pagos['total']
     else:
         total_pagos = 0    
     if request.method == 'POST':
-        date_pago = datetime.now().date()
-        amount = request.POST['amount']
-        method = request.POST['method']
+        metodo_pago = request.POST['metodo_pago']
+        fecha = datetime.now().date()
+        valor = request.POST['valor']
         pago_reserva = request.POST['pago_reserva']
         pago = Pago.objects.create(
-            date_pago=date_pago,
-            amount=int(amount),
-            method=method,
+            metodo_pago = metodo_pago,
+            fecha=fecha,
+            valor=int(valor),
             reserva=reserva,
-            status='Confirmado'
+            estado=True
         )
         try:
             pago.save()     
-            total_p = Pago.objects.filter(reserva_id=id).aggregate(total=models.Sum('amount'))       
-            if  int(total_p['total']) >= (reserva.precio / 2) and int(total_p['total']) < reserva.precio:
-                reserva.status = 'Confirmada'
-            elif int(total_p['total']) >= reserva.precio:
-                reserva.status = 'En ejecución'        
+            total_p = Pago.objects.filter(reserva_id=id).aggregate(total=models.Sum('valor'))       
+            if  int(total_p['total']) >= (reserva.valor / 2) and int(total_p['total']) < reserva.valor:
+                reserva.estado = 'Confirmada'
+            elif int(total_p['total']) >= reserva.valor:
+                reserva.estado = 'En ejecución'        
             reserva.save()
             return redirect('reservas') 
         

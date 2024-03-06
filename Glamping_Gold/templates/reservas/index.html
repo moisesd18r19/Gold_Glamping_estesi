@@ -46,6 +46,9 @@
                             <a href="{% url 'cancel_reserva' reserva.id %}" class="btn btn-danger btn-circle btn-sm deleteBtn">
                                 <i class="fas fa-times"></i>
                             </a>
+                            <a href="{% url 'pago_reserva' reserva.id %}" class="btn btn-success btn-circle btn-sm">
+                                <i class="fa fa-money"></i>
+                            </a>
                         </td>
                     </tr>
                     {% endfor %}
