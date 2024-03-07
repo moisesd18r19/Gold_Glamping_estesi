@@ -21,6 +21,7 @@ urlpatterns = [
     path('Pdfview/<int:pk>/', Pdfview.as_view(), name='Pdfview'),
     
     
+    
 
     
   

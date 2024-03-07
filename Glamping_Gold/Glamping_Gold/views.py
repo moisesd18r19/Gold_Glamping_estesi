@@ -92,7 +92,7 @@ class Pdfview(View):
             reserva_servicios = Reserva_servicio.objects.filter(id_reserva=reserva)
             
             # Renderizar el contenido del PDF directamente desde una cadena HTML
-            html = render_to_string('invoice.html', {'reserva': reserva, 'reserva_cabañas': reserva_cabañas, 'reserva_servicios': reserva_servicios})
+            html = render_to_string('pdfinvoice.html', {'reserva': reserva, 'reserva_cabañas': reserva_cabañas, 'reserva_servicios': reserva_servicios})
             
             # Crear un objeto BytesIO para almacenar el PDF
             buffer = BytesIO()
@@ -110,3 +110,5 @@ class Pdfview(View):
         
         # En caso de excepción o si la reserva no existe, devolver una respuesta vacía con un código de estado 404
         return HttpResponse(status=404)
+    
+    

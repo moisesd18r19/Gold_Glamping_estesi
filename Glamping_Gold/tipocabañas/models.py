@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Tipocabaña(models.Model):
-    nombre = models.CharField(max_length=255 , )
+    nombre = models.CharField(max_length=255 , unique=True)
     status = models.BooleanField(default=True)
 
     def __str__(self):

@@ -28,10 +28,10 @@
         <div class="mb-3">
             <label for="" class="form-label">cliente</label>
             <select class="form-control" name="cliente" id=""
-                placeholder="Selecciona un cliente" value="{{cliente.nombre}}"
+                placeholder="Selecciona un cliente" value="{{reserva.cliente.nombre}}"
                 <option value="">Selecciona un cliente</option>
                 {% for cliente in cliente_list %}
-                <option value="{{cliente.id}}">{{cliente.nombre}}</option>
+                <option value="{{reserva.cliente.id}}">{{reserva.cliente.nombre}}</option>
                 {% endfor %}
             </select>
         </div>
