@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 
-
 {% block title %}Glamping Gold{% endblock %}
 
 {% block content %}
@@ -19,22 +18,24 @@
                 <input type="text" class="form-control col-3 mx-3" name="reserva_total" id="reserva_total" value="{{ reserva.precio }}" readonly />
                 <label for="" class="form-label mx-3">Total pagos</label>
                 <input type="text" class="form-control col-3" name="pago_reserva" id="pago_reserva" value="{{ total_pagos}}" readonly />
+                <input type="hidden" name="total_pagos" value="{{ total_pagos }}" />
             </div>
             <div class="mb-3 d-flex">
                 <label for="" class="form-label">Método de pago</label>
                 <select
                     class="form-control mx-2 col-3"
-                    name="method"
+                    name="metodo_pago" 
                     id="method">
-                    <option selected>Seleccione una opción</option>
+                    <option selected>Select una opción</option>
                     <option value="Efectivo">Efectivo</option>
                     <option value="Tarjeta Crédito">Tarjeta Crédito</option>
                     <option value="Tarjeta Débito">Tarjeta Débito</option>
                     <option value="Transferencia">Transferencia</option>
                 </select>
+            
                 <label for="" class="form-label ml-4">Abono</label>
                 <input
-                    type="text" class="form-control col-3 mx-5" name="amount" id="amount" aria-describedby="helpId" placeholder="" />
+                    type="text" class="form-control col-3 mx-5" name="valor" id="valor" aria-describedby="helpId" placeholder="" />
             </div>
             
             <button type="submit" class="btn btn-primary">Pagar</button>
@@ -46,9 +47,9 @@
 <script>
     let reserva_total = document.getElementById('reserva_total').value;
     let pago_reserva = document.getElementById('pago_reserva').value;
-    let amount = reserva_total / 2;
+    let valor = reserva_total / 2;
     if (reserva_total != pago_reserva) {
-        document.getElementById('amount').value = amount;        
+        document.getElementById('valor').value = valor;        
     }
     
 </script>
