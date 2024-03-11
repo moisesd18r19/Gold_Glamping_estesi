@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from cabañas.models import Cabaña
+from pagos.models import Pago
 from Glamping_Gold.forms import RegisterForm
 from cliente.models import Cliente
 from django.contrib.auth.models import Group
@@ -13,6 +14,20 @@ from reservas_cabañas.models import Reserva_cabaña
 from reservas_servicios.models import Reserva_servicio
 from django.template.loader import render_to_string
 from io import BytesIO
+from django.views.generic import ListView
+from django.http import JsonResponse
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from django.core.mail import EmailMessage
+from email.mime.text import MIMEText
+import random
+import string
+from django.contrib.auth.models import User
+from django.http import HttpResponse
+
+from django.contrib.auth.hashers import make_password
+from django.core.mail import EmailMessage
+from django.contrib.auth.models import User
 
 import os
 from django.conf import settings
@@ -30,6 +45,8 @@ def login(request):
 
 def register(request):
     return render (request, 'register.html')
+
+
 
 def landing(request):    
     cabañas_lan = Cabaña.objects.filter(status=True)   
@@ -111,4 +128,54 @@ class Pdfview(View):
         # En caso de excepción o si la reserva no existe, devolver una respuesta vacía con un código de estado 404
         return HttpResponse(status=404)
     
-    
+
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import random
+import string
+
+def generar_contraseña():
+    caracteres = string.ascii_letters + string.digits
+    longitud = 10
+    return ''.join(random.choice(caracteres) for i in range(longitud))
+
+def enviar_correo(destinatario, contraseña):
+    # Configuración del servidor SMTP
+    smtp_server = 'smtp.gmail.com'
+    puerto = 587
+    remitente = 'moises321call@gmail.com'
+    contraseña_smtp = 'dzib npka pffw vmbl'
+
+    # Crear el mensaje
+    mensaje = MIMEMultipart()
+    mensaje['From'] = remitente
+    mensaje['To'] = destinatario
+    mensaje['Subject'] = 'Recuperación de contraseña'
+
+    cuerpo = f'Tu nueva contraseña es: {contraseña}'
+    mensaje.attach(MIMEText(cuerpo, 'plain', 'utf-8'))
+
+    # Iniciar sesión en el servidor SMTP
+    servidor = smtplib.SMTP(smtp_server, puerto)
+    servidor.starttls()
+    servidor.login(remitente, contraseña_smtp)
+
+    # Enviar el correo electrónico
+    servidor.send_message(mensaje)
+
+    # Cerrar la conexión
+    servidor.quit()
+
+# Función principal
+def recuperar_contraseña(email):
+    correo_destino = email
+    nueva_contraseña = generar_contraseña()
+    enviar_correo(correo_destino, nueva_contraseña)
+
+def recover_password(request):    
+    if request.method == 'POST':
+        email = request.POST['email']
+        """ Cosultar el usuario por el correo  y cambiar la contraseña encriptada"""
+        recuperar_contraseña(email)
+    return render(request, 'forgot-password.html')

@@ -30,7 +30,7 @@ def detail_servicio(request, servicio_id):
 def delete_servicio(request, servicio_id):
     servicio = Servicio.objects.get(pk=servicio_id)
     try:
-        servicios.delete()        
+        servicio.delete()        
         messages.success(request, 'Servicio eliminado correctamente.')
     except:
 

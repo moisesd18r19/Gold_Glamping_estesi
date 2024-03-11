@@ -19,7 +19,8 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     path('register/', views.register, name='register'),
     path('Pdfview/<int:pk>/', Pdfview.as_view(), name='Pdfview'),
-    
+    path('forgot-password/', views.recover_password, name='forgot-password'),
+    path('recuperar-contraseña/', views.recuperar_contraseña, name='recuperar_contraseña'),
     
     
 
