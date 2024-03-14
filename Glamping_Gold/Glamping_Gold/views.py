@@ -179,3 +179,50 @@ def recover_password(request):
         """ Cosultar el usuario por el correo  y cambiar la contraseña encriptada"""
         recuperar_contraseña(email)
     return render(request, 'forgot-password.html')
+
+
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Paragraph
+from io import BytesIO
+
+class PagosPDFView(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            reserva_id = kwargs.get('pk')
+            reserva = Reserva.objects.get(pk=reserva_id)
+            pagos = Pago.objects.filter(reserva=reserva)
+
+            # Crear un objeto BytesIO para almacenar el PDF
+            buffer = BytesIO()
+
+            # Crear un documento PDF
+            doc = SimpleDocTemplate(buffer, pagesize=letter)
+            elements = []
+
+            # Agregar encabezado al PDF
+            elements.append(Paragraph(f"Pagos para la Reserva #{reserva_id}",))
+
+            # Agregar información de los pagos
+            for pago in pagos:
+                elements.append(Paragraph(f"Método de Pago: {pago.metodo_pago}",))
+                elements.append(Paragraph(f"Fecha: {pago.fecha}",))
+                elements.append(Paragraph(f"Valor: {pago.valor}",))
+                elements.append(Paragraph("<br/><br/>",))  # Salto de línea entre pagos
+
+            # Generar el PDF
+            doc.build(elements)
+
+            # Obtener el valor del buffer y cerrarlo
+            pdf = buffer.getvalue()
+            buffer.close()
+
+            # Devolver el PDF como respuesta
+            response = HttpResponse(pdf, content_type='application/pdf')
+            response['Content-Disposition'] = f'attachment; filename="pagos_reserva_{reserva_id}.pdf"'
+            return response
+
+        except Reserva.DoesNotExist:
+            pass
+
+        # En caso de excepción o si la reserva no existe, devolver una respuesta vacía con un código de estado 404
+        return HttpResponse(status=404)

@@ -8,7 +8,7 @@ class PagoForm(forms.ModelForm):
     class Meta:
         model = Pago
         fields = "__all__"
-        exclude = ['status']
+        exclude = ['estado']
         labels = {
             'fecha': 'Fecha',
             'metodo_pago': 'Metodo Pago',
