@@ -107,14 +107,17 @@ class Pdfview(View):
             reserva = Reserva.objects.get(pk=reserva_id)
             reserva_cabañas = Reserva_cabaña.objects.filter(id_reserva=reserva)
             reserva_servicios = Reserva_servicio.objects.filter(id_reserva=reserva)
-            
+
+            # Calcular el número de días reservados
+            dias_reservados = (reserva.fecha_fin - reserva.fecha_inicio).days
+
             # Renderizar el contenido del PDF directamente desde una cadena HTML
-            html = render_to_string('pdfinvoice.html', {'reserva': reserva, 'reserva_cabañas': reserva_cabañas, 'reserva_servicios': reserva_servicios})
-            
+            html = render_to_string('pdfinvoice.html', {'reserva': reserva, 'reserva_cabañas': reserva_cabañas, 'reserva_servicios': reserva_servicios, 'dias_reservados': dias_reservados})
+
             # Crear un objeto BytesIO para almacenar el PDF
             buffer = BytesIO()
             pisa_status = pisa.CreatePDF(html, dest=buffer)
-            
+
             if not pisa_status.err:
                 # Si la generación del PDF fue exitosa, devolver el PDF como respuesta
                 pdf = buffer.getvalue()
@@ -124,7 +127,7 @@ class Pdfview(View):
                 return response
         except Reserva.DoesNotExist:
             pass
-        
+
         # En caso de excepción o si la reserva no existe, devolver una respuesta vacía con un código de estado 404
         return HttpResponse(status=404)
     

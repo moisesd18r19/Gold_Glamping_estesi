@@ -26,23 +26,21 @@
             </div>
         </div>
         <div class="mb-3">
-            <label for="" class="form-label">cliente</label>
-            <select class="form-control" name="cliente" id=""
-                placeholder="Selecciona un cliente" value="{{reserva.cliente.nombre}}"
+            <label for="" class="form-label">Cliente</label>
+            <select class="form-control" name="cliente" id="">
                 <option value="">Selecciona un cliente</option>
                 {% for cliente in cliente_list %}
-                <option value="{{reserva.cliente.id}}">{{reserva.cliente.nombre}}</option>
+                    <option value="{{ cliente.id }}" {% if cliente.id == reserva.cliente.id %} selected {% endif %}>{{ cliente.nombre }}</option>
                 {% endfor %}
             </select>
         </div>
         <div class="mb-3">
             <label for="" class="form-label">Cabaña</label>
             <div class="d-flex">
-                <select class="form-control" name="cabaña" id=""
-                    placeholder="Selecciona una cabaña" value="{{cabaña.nombre}}"                   
+                <select class="form-control" name="cabaña" id="">
                     <option value="">Selecciona una cabaña</option>
                     {% for cabaña in cabañas_list %}
-                    <option value="{{cabaña.id}}">{{cabaña.nombre}} - {{cabaña.precio}}</option>
+                        <option value="{{ cabaña.id }}">{{ cabaña.nombre }} - {{ cabaña.precio }}</option>
                     {% endfor %}
                 </select>
                 <a href="" onclick="addcabaña(event)" class="btn btn-primary btn-icon-split mb-3">
@@ -53,11 +51,10 @@
         <div class="mb-3">
             <label for="" class="form-label">Servicio</label>
             <div class="d-flex">
-                <select class="form-control" name="servicio" id=""
-                placeholder="Selecciona un servicio" value="{{servicio.nombre}}"
+                <select class="form-control" name="servicio" id="">
                     <option value="">Selecciona un servicio</option>
                     {% for servicio in servicios_list %}
-                    <option value="{{servicio.id}}">{{servicio.nombre}} - {{servicio.precio}}</option>
+                        <option value="{{ servicio.id }}">{{ servicio.nombre }} - {{ servicio.precio }}</option>
                     {% endfor %}
                 </select>
                 <a onclick="addservicio(event)" href="" class="btn btn-primary btn-icon-split mb-3">
@@ -78,6 +75,32 @@
                     </tr>
                 </thead>
                 <tbody id="treservas">
+                    {% for cabaña in cabañas_asociadas %}
+                        <tr>                               
+                            <td>
+                                {{ cabaña.id_cabaña.nombre }}
+                            </td>
+                            <td>{{ cabaña.precio_C }}</td>                
+                            <td>
+                                <a onclick='removeReserva(event, "cabaña")' class="btn btn-danger btn-circle btn-sm">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    {% for servicio in servicios_asociados %}
+                        <tr>                                
+                            <td>
+                                {{ servicio.id_servicio.nombre }}
+                            </td>
+                            <td>{{ servicio.precio_S }}</td>                
+                            <td>
+                                <a onclick='removeReserva(event, "servicio")' class="btn btn-danger btn-circle btn-sm">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
                 <thead>
                     <tr>
@@ -90,7 +113,6 @@
         </div>
         <div class="text-center">
             <button type="submit" class="btn btn-primary">Enviar</button>
-
         </div>
     </form>
 </div>
@@ -100,7 +122,6 @@
     servicios_added = [];
     let total = 0;
     function addcabaña(event) {
-     
         event.preventDefault();
         let cabañaSelect = $('select[name="cabaña"]');
         let cabañaId = cabañaSelect.val();
@@ -172,6 +193,5 @@
         document.getElementById('totalValue').value = total;
     }
 </script>
-
 
 {% endblock %}

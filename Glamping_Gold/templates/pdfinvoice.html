@@ -33,26 +33,12 @@
         <table class="table">
           <thead>
             <tr>
-              <th>Descripción</th>
               <th>Fecha de Inicio: {{ reserva.fecha_inicio|date:'Y-m-d' }}</th>
               <th>Fecha de Fin: {{ reserva.fecha_fin|date:'Y-m-d' }}</th>
+              <th><p><strong>Días reservados:</strong> {{ dias_reservados }}</p></th>
             </tr>
           </thead>
           <tbody>
-            <!-- Aquí puedes agregar dinámicamente los detalles de la reserva -->
-            <tr>
-              <td>Habitación Doble</td>
-              <td>Fecha inicio reserva</td>
-              <td>Fecha fin reserva</td>
-              <td>Precio reserva</td>
-            </tr>
-            <!-- Ejemplo de otra fila -->
-            <!-- <tr>
-              <td>Otro artículo</td>
-              <td>Fecha inicio</td>
-              <td>Fecha fin</td>
-              <td>Precio</td>
-            </tr> -->
           </tbody>
         </table>
         <table class="table table-bordered" width="100%" cellspacing="0">

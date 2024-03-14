@@ -95,6 +95,8 @@ def edit_reserva(request, reserva_id):
     cliente_list = Cliente.objects.all()
     cabañas_list = Cabaña.objects.all()
     servicios_list = Servicio.objects.all()
+    cabañas_asociadas = Reserva_cabaña.objects.filter(id_reserva=reserva)
+    servicios_asociados = Reserva_servicio.objects.filter(id_reserva=reserva)
     
     if request.method == 'POST':
         fecha_inicio_str = request.POST['fecha_inicio']
@@ -138,4 +140,5 @@ def edit_reserva(request, reserva_id):
         ## messages.success(request, 'Reserva actualizada con éxito.')
         return HttpResponseRedirect(reverse('reservas'))
     
-    return render(request, 'reservas/edit.html', {'reserva': reserva, 'cliente_list': cliente_list, 'cabañas_list': cabañas_list, 'servicios_list': servicios_list})
+    return render(request, 'reservas/edit.html', {'reserva': reserva, 'cliente_list': cliente_list, 'cabañas_list': cabañas_list, 'servicios_list': servicios_list, 'cabañas_asociadas': cabañas_asociadas, 'servicios_asociados': servicios_asociados})
+
