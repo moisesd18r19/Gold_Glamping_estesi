@@ -31,15 +31,15 @@
                     <td>{{ pago.fecha }}</td>
                     <td>{{ pago.metodo_pago }}</td>
                     <td>{{ pago.valor }}</td>
-                    <td>{{ pago.reservas }}</td>
-                    <td>{{ pago.estado}}</td>
+                    <td>{{ pago.reserva.id }}</td>
+                    
                     <!-- Toggle Switch button -->
                     <td>
                         <form action="{% url 'pago_status' pago.id %}" method="POST">
                             
                             {% csrf_token %}                            
                             <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="customSwitch{{ forloop.counter }}" {% if pago.status %} checked {% endif %} onchange="this.form.submit()">
+                                <input type="checkbox" class="custom-control-input" id="customSwitch{{ forloop.counter }}" {% if pago.estado %} checked {% endif %} onchange="this.form.submit()">
                                 <label class="custom-control-label" for="customSwitch{{ forloop.counter }}"></label>
                             </div>                     
                         </form>
@@ -53,6 +53,9 @@
                         </a>
                         <a href="{% url 'delete_pago' pago.id %}" class="deleteBtn btn btn-danger btn-circle btn-sm">
                             <i class="fas fa-trash"></i>
+                        </a>
+                        <a href="{% url 'pagos_pdf' pk=pago.reserva.pk %}" class="btn btn-danger btn-circle btn-sm">
+                            <span>PDF</span>
                         </a>
                     </tr>
                     {% endfor %}                                     
