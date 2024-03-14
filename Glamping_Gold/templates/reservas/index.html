@@ -35,7 +35,7 @@
                         <td>{{ reserva.fecha_reserva|date:"d/m/Y" }}</td>                  
                         <td>{{ reserva.cliente.documento}}</td>
                         <td>{{ reserva.cliente}}</td>                        
-                        <td>{{ reserva.valor }}</td>
+                        <td>{{ reserva.precio }}</td>
                         <td>{{ reserva.estado }}</td>
                         <td>                         
                             <a href="{% url 'detail_reserva' reserva.id %}" class="btn btn-info btn-circle btn-sm">

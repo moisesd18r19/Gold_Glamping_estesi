@@ -21,7 +21,7 @@ def pagos(request):
 
 def change_status_pago(request, pago_id):
     pago = Pago.objects.get(pk=pago_id)
-    pago.status = not pago.status
+    pago.estado = not pago.estado
     pago.save()
     return redirect('pagos')
 
