@@ -24,7 +24,7 @@
             </div>
         </div>
         <div class="mb-3">
-            <label for="" class="form-label">cliente</label>
+            <label for="" class="form-label">Cliente</label>
             <select class="form-control" name="cliente" id="">
                 <option value="">Selecciona un cliente</option>
                 {% for cliente in cliente_list %}
@@ -168,15 +168,15 @@
         let id = element.id;          
         if (type == 'cabaña') {
             cabañas_added = cabañas_added.filter(cabaña => cabaña != id);
+            let cabañaprecio = parseFloat(element.children[1].textContent);
+            total -= cabañaprecio;
         } else {
             servicios_added = servicios_added.filter(servicio => servicio != id);
+            let servicioprecio = parseFloat(element.children[1].textContent);
+            total -= servicioprecio;
         }
         element.remove();
-        let valor = parseFloat(element.children[1].textContent);
-        if (!isNaN(valor)) { // Verifica si el valor es un número antes de restarlo
-            total -= valor;
-            document.getElementById('totalValue').value = total;
-        }
+        document.getElementById('totalValue').value = total;
     }
 
     function validarFechas() {
@@ -190,9 +190,16 @@
             return false;
         }
 
-        // Validar que la fecha fin no sea anterior a la fecha de inicio
-        if (fechaFin < fechaInicio) {
-            alert("La fecha fin no puede ser anterior a la fecha de inicio.");
+        // Validar que la fecha fin no sea anterior o igual a la fecha de inicio
+        if (fechaFin <= fechaInicio) {
+            alert("La fecha fin debe ser posterior a la fecha de inicio.");
+            return false;
+        }
+
+        // Validar el contador de días (aquí se puede definir un límite deseado)
+        let diasReserva = (fechaFin - fechaInicio) / (1000 * 60 * 60 * 24);
+        if (diasReserva < 1 || diasReserva > 7) {
+            alert("La reserva debe ser de al menos 1 día y máximo 7 días.");
             return false;
         }
 

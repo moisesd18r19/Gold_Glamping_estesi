@@ -24,6 +24,7 @@ import random
 import string
 from django.contrib.auth.models import User
 from django.http import HttpResponse
+from datetime import datetime
 
 from django.contrib.auth.hashers import make_password
 from django.core.mail import EmailMessage
@@ -194,35 +195,32 @@ class PagosPDFView(View):
             reserva_id = kwargs.get('pk')
             reserva = Reserva.objects.get(pk=reserva_id)
             pagos = Pago.objects.filter(reserva=reserva)
+            cliente = reserva.cliente
+            fecha_actual = datetime.now().strftime("%d/%m/%Y")
+            hora_actual = datetime.now().strftime("%H:%M:%S")
+
+            # Renderizar la plantilla HTML
+            template = get_template('pdfpago.html')
+            html = template.render({
+                'reserva_id': reserva_id,
+                'pagos': pagos,
+                'cliente': cliente,
+                'fecha_actual': fecha_actual,
+                'hora_actual': hora_actual
+            })
 
             # Crear un objeto BytesIO para almacenar el PDF
             buffer = BytesIO()
 
-            # Crear un documento PDF
-            doc = SimpleDocTemplate(buffer, pagesize=letter)
-            elements = []
-
-            # Agregar encabezado al PDF
-            elements.append(Paragraph(f"Pagos para la Reserva #{reserva_id}",))
-
-            # Agregar información de los pagos
-            for pago in pagos:
-                elements.append(Paragraph(f"Método de Pago: {pago.metodo_pago}",))
-                elements.append(Paragraph(f"Fecha: {pago.fecha}",))
-                elements.append(Paragraph(f"Valor: {pago.valor}",))
-                elements.append(Paragraph("<br/><br/>",))  # Salto de línea entre pagos
-
-            # Generar el PDF
-            doc.build(elements)
-
-            # Obtener el valor del buffer y cerrarlo
-            pdf = buffer.getvalue()
-            buffer.close()
+            # Convertir el HTML a PDF
+            pisa_status = pisa.CreatePDF(html, dest=buffer)
 
             # Devolver el PDF como respuesta
-            response = HttpResponse(pdf, content_type='application/pdf')
-            response['Content-Disposition'] = f'attachment; filename="pagos_reserva_{reserva_id}.pdf"'
-            return response
+            if not pisa_status.err:
+                buffer.seek(0)
+                response = HttpResponse(buffer, content_type='application/pdf')
+                response['Content-Disposition'] = f'attachment; filename="pagos_reserva_{reserva_id}.pdf"'
+                return response
 
         except Reserva.DoesNotExist:
             pass

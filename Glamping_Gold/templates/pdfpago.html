@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comprobante de pago</title>
+</head>
+<body>
+  {% for pago in pagos %} 
+  <div class="container">
+    <h1 class="text-align-center">Comprobante de pago</h1>
+    <table>
+      <thead>
+        <th></th>
+        <th></th>
+      </thead>
+      <tbody>
+        <td>Comprobante Nro. {{ pago.reserva.id }}</td>
+        <td>Fecha: {{ fecha_actual }}</td>
+        <td>Hora: {{ hora_actual }}</td>
+      </tbody>
+    </table>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col"> 
+      <p>Cliente: <strong>{{ pago.reserva.cliente.nombre }}</strong></p>
+      <p>Documento: <strong>{{ pago.reserva.cliente.documento }}</strong></p>
+      <p>Teléfono: <strong>{{ pago.reserva.cliente.telefone }}</strong></p>
+    </div>
+    <hr>
+    <div>
+      <p>Método de Pago: {{ pago.metodo_pago }}</p>
+      <p>Fecha: {{ pago.fecha }}</p>
+      <p>Valor: {{ pago.valor }}</p>
+    </div>
+  {% endfor %}  
+</body>
+</html>
