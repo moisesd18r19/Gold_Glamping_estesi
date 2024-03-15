@@ -86,9 +86,9 @@ def pago_reserva(request, id):
         try:
             pago.save()     
             total_p = Pago.objects.filter(reserva_id=id).aggregate(total=models.Sum('valor'))       
-            if  int(total_p['total']) >= (reserva.valor / 2) and int(total_p['total']) < reserva.valor:
+            if  int(total_p['total']) >= (reserva.precio / 2) and int(total_p['total']) < reserva.precio:
                 reserva.estado = 'Confirmada'
-            elif int(total_p['total']) >= reserva.valor:
+            elif int(total_p['total']) >= reserva.precio:
                 reserva.estado = 'En ejecución'        
             reserva.save()
             return redirect('reservas') 
@@ -96,5 +96,4 @@ def pago_reserva(request, id):
         except Exception as e:
             return redirect('reservas')         
     return render(request, 'pago.html', {'reserva': reserva, 'total_pagos': total_pagos})
-
 #
