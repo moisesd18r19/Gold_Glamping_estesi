@@ -1,24 +1,20 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.models import User
-from django.urls import reverse_lazy
 from cabañas.models import Cabaña
 from pagos.models import Pago
 from Glamping_Gold.forms import RegisterForm
 from cliente.models import Cliente
 from django.contrib.auth.models import Group
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.views import View
 from reservas.models import Reserva
 from reservas_cabañas.models import Reserva_cabaña
 from reservas_servicios.models import Reserva_servicio
 from django.template.loader import render_to_string
 from io import BytesIO
-from django.views.generic import ListView
-from django.http import JsonResponse
 import smtplib
 from email.mime.multipart import MIMEMultipart
-from django.core.mail import EmailMessage
 from email.mime.text import MIMEText
 import random
 import string
@@ -26,16 +22,11 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from datetime import datetime
 
-from django.contrib.auth.hashers import make_password
-from django.core.mail import EmailMessage
 from django.contrib.auth.models import User
 
-import os
-from django.conf import settings
 from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
-from django.contrib.staticfiles import finders
 
 import pdfkit
 from django.utils import timezone
@@ -189,8 +180,6 @@ def recover_password(request):
     return render(request, 'forgot-password.html')
 
 
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph
 from io import BytesIO
 
 class PagosPDFView(View):
@@ -233,7 +222,6 @@ class PagosPDFView(View):
         # En caso de excepción o si la reserva no existe, devolver una respuesta vacía con un código de estado 404
         return HttpResponse(status=404)
     
-<<<<<<< HEAD
 class ReportePagos(View):
     def get(self, request, *args, **kwargs):
         try:
@@ -263,6 +251,4 @@ class ReportePagos(View):
             print(e)
             message = "Ha ocurrido un error al generar el reporte. Intente nuevamente más tarde."
             return HttpResponse(message, status=500)
-=======
 
->>>>>>> 43bdb92c913da7c47a1b7cc7c29c6bca0a4f1f66
