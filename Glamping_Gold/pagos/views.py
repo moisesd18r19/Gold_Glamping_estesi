@@ -11,10 +11,12 @@ from django.shortcuts import redirect
 from reservas.models import Reserva
 from django.db import models
 from . models import Pago
+from django.contrib.auth.decorators import user_passes_test,login_required
 
-
-
-
+def is_admin_or_staff(user):
+    return user.is_authenticated and (user.is_staff or user.groups.filter(name='Administradores').exists())
+@login_required
+@user_passes_test(is_admin_or_staff)
 def pagos(request):    
     pagos_list = Pago.objects.all()    
     return render(request, 'pagos/index.html', {'pagos_list': pagos_list})

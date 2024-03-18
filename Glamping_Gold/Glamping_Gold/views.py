@@ -233,6 +233,7 @@ class PagosPDFView(View):
         # En caso de excepción o si la reserva no existe, devolver una respuesta vacía con un código de estado 404
         return HttpResponse(status=404)
     
+<<<<<<< HEAD
 class ReportePagos(View):
     def get(self, request, *args, **kwargs):
         try:
@@ -262,3 +263,6 @@ class ReportePagos(View):
             print(e)
             message = "Ha ocurrido un error al generar el reporte. Intente nuevamente más tarde."
             return HttpResponse(message, status=500)
+=======
+
+>>>>>>> 43bdb92c913da7c47a1b7cc7c29c6bca0a4f1f66
