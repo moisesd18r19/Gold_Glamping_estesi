@@ -1,24 +1,21 @@
+import json
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.models import User
-from django.urls import reverse_lazy
 from cabañas.models import Cabaña
 from pagos.models import Pago
 from Glamping_Gold.forms import RegisterForm
 from cliente.models import Cliente
 from django.contrib.auth.models import Group
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.views import View
 from reservas.models import Reserva
 from reservas_cabañas.models import Reserva_cabaña
 from reservas_servicios.models import Reserva_servicio
 from django.template.loader import render_to_string
 from io import BytesIO
-from django.views.generic import ListView
-from django.http import JsonResponse
 import smtplib
 from email.mime.multipart import MIMEMultipart
-from django.core.mail import EmailMessage
 from email.mime.text import MIMEText
 import random
 import string
@@ -26,24 +23,55 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from datetime import datetime
 
-from django.contrib.auth.hashers import make_password
-from django.core.mail import EmailMessage
 from django.contrib.auth.models import User
 
-import os
-from django.conf import settings
 from django.http import HttpResponse
 from django.template.loader import get_template
-from xhtml2pdf import pisa
-from django.contrib.staticfiles import finders
+
 
 import pdfkit
 from django.utils import timezone
 
+import calendar
+from django.db.models.functions import ExtractMonth
+from django.db.models import Sum
+
+def index (request):
+
+    # --- Inicio grafica dashboard ---
+    ingresos_por_mes = Pago.objects.filter(estado=True).annotate(
+    mes=ExtractMonth('fecha')
+    ).values('mes').annotate(total_ingresos=Sum('valor'))
+    meses = range(1, 13)
+
+    # Agregar cada mes y su valor a la lista de datos
+    data = [["Mes", "Ingresos"]]
+    for mes in meses:
+        total_mes = 0
+        nombre_mes = calendar.month_name[mes]
+        for ingreso_mes in ingresos_por_mes:
+            if ingreso_mes['mes'] == mes:
+                total_mes = ingreso_mes['total_ingresos']
+                break
+        data.append([nombre_mes, total_mes])
 
 
-def index(request):
-    return render(request, 'index.html')
+    # --- Fin grafica dashboard ---
+    total_pagos = Pago.objects.aggregate(total=Sum('valor'))
+    count = Cabaña.objects.count()
+    customer = Cliente.objects.count()
+    count_booking = Reserva.objects.filter(estado="Reservado").count()
+    count_booking2 = Reserva.objects.filter(estado="En ejecución").count()
+    total_reservas = count_booking + count_booking2
+    
+    return render(request, 'index.html', {
+        "count": count,
+        "count_booking": count_booking,
+        "count_booking2": count_booking2,
+        "total_reservas": total_reservas,
+        "customer": customer,'total_pagos': total_pagos['total'],
+        'data': json.dumps(data)
+    })
 
 def login(request):
     return render(request, 'login.html')
@@ -189,8 +217,6 @@ def recover_password(request):
     return render(request, 'forgot-password.html')
 
 
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph
 from io import BytesIO
 
 class PagosPDFView(View):
@@ -233,7 +259,7 @@ class PagosPDFView(View):
         # En caso de excepción o si la reserva no existe, devolver una respuesta vacía con un código de estado 404
         return HttpResponse(status=404)
     
-<<<<<<< HEAD
+
 class ReportePagos(View):
     def get(self, request, *args, **kwargs):
         try:
@@ -263,6 +289,4 @@ class ReportePagos(View):
             print(e)
             message = "Ha ocurrido un error al generar el reporte. Intente nuevamente más tarde."
             return HttpResponse(message, status=500)
-=======
 
->>>>>>> 43bdb92c913da7c47a1b7cc7c29c6bca0a4f1f66
