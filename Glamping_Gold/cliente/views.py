@@ -4,8 +4,12 @@ from .models import Cliente
 from django.http import JsonResponse
 
 from django.contrib import messages
+from django.contrib.auth.decorators import user_passes_test,login_required
 
-
+def is_admin_or_staff(user):
+    return user.is_authenticated and (user.is_staff or user.groups.filter(name='Administradores').exists())
+@login_required
+@user_passes_test(is_admin_or_staff)
 def cliente(request):    
     cliente_list = Cliente.objects.all()  
     return render(request, 'cliente/index.html', {'cliente_list': cliente_list})

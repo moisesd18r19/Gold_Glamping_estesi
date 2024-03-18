@@ -14,7 +14,7 @@ from cabañas.models import Cabaña
 from datetime import datetime   
 from django.contrib import messages
 from django.urls import reverse
-
+from django.shortcuts import render
 
 def reservas(request):    
     reservas_list = Reserva.objects.all()    
@@ -144,3 +144,7 @@ def edit_reserva(request, reserva_id):
         return redirect('reservas')
     
     return render(request, 'reservas/edit.html', {'reserva': reserva, 'cliente_list': cliente_list, 'cabañas_list': cabañas_list, 'servicios_list': servicios_list, 'cabañas_asociadas': cabañas_asociadas, 'servicios_asociados': servicios_asociados})
+
+
+
+

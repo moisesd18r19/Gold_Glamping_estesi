@@ -227,3 +227,5 @@ class PagosPDFView(View):
 
         # En caso de excepción o si la reserva no existe, devolver una respuesta vacía con un código de estado 404
         return HttpResponse(status=404)
+    
+
