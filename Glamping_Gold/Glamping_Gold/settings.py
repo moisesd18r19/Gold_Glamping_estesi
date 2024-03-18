@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'reservas',
     'pagos',
     'reservas_servicios',
-    'reservas_cabañas'
+    'reservas_cabañas',
+    'wkhtmltopdf',
 ]
 
 

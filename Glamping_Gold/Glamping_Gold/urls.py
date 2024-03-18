@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from . import views
-from .views import Pdfview, PagosPDFView
+from .views import Pdfview, PagosPDFView, ReportePagos
 
 
 urlpatterns = [
@@ -22,7 +22,7 @@ urlpatterns = [
     path('forgot-password/', views.recover_password, name='forgot-password'),
     path('recuperar-contraseña/', views.recuperar_contraseña, name='recuperar_contraseña'),
     path('reservas/<int:pk>/pdf/', PagosPDFView.as_view(), name='pagos_pdf'),
-
+    path('reporte_pagos/', ReportePagos.as_view(), name='reporte_pagos'),
     
     
 
