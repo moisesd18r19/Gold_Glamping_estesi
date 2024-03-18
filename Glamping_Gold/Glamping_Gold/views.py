@@ -37,6 +37,10 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.contrib.staticfiles import finders
 
+import pdfkit
+from django.utils import timezone
+
+
 
 def index(request):
     return render(request, 'index.html')
@@ -196,8 +200,8 @@ class PagosPDFView(View):
             reserva = Reserva.objects.get(pk=reserva_id)
             pagos = Pago.objects.filter(reserva=reserva)
             cliente = reserva.cliente
-            fecha_actual = datetime.now().strftime("%d/%m/%Y")
-            hora_actual = datetime.now().strftime("%H:%M:%S")
+            fecha_actual = timezone.now().strftime("%d/%m/%Y")
+            hora_actual = timezone.now().strftime("%H:%M:%S")
 
             # Renderizar la plantilla HTML
             template = get_template('pdfpago.html')
@@ -209,21 +213,52 @@ class PagosPDFView(View):
                 'hora_actual': hora_actual
             })
 
-            # Crear un objeto BytesIO para almacenar el PDF
-            buffer = BytesIO()
+            # Configurar las opciones de pdfkit
+            options = {
+                'page-size': 'A4',
+                'encoding': 'UTF-8',
+            }
 
             # Convertir el HTML a PDF
-            pisa_status = pisa.CreatePDF(html, dest=buffer)
+            pdf_file = pdfkit.from_string(html, False, options=options)
 
             # Devolver el PDF como respuesta
-            if not pisa_status.err:
-                buffer.seek(0)
-                response = HttpResponse(buffer, content_type='application/pdf')
-                response['Content-Disposition'] = f'attachment; filename="pagos_reserva_{reserva_id}.pdf"'
-                return response
+            response = HttpResponse(pdf_file, content_type='application/pdf')
+            response['Content-Disposition'] = f'attachment; filename="pagos_reserva_{reserva_id}.pdf"'
+            return response
 
         except Reserva.DoesNotExist:
             pass
 
         # En caso de excepción o si la reserva no existe, devolver una respuesta vacía con un código de estado 404
         return HttpResponse(status=404)
+    
+class ReportePagos(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            # Obtener todos los pagos
+            pagos = Pago.objects.all()
+
+            # Obtener la fecha actual para el encabezado del reporte
+            fecha_actual = datetime.now().strftime("%d/%m/%Y")
+
+            # Renderizar la plantilla HTML
+            template = get_template('reporte_pagos.html')
+            html_content = template.render({
+                'pagos': pagos,
+                'fecha_actual': fecha_actual,
+            })
+
+            # Generar PDF desde HTML con pdfkit
+            pdf_file = pdfkit.from_string(html_content, False)
+
+            # Devolver el PDF como respuesta
+            response = HttpResponse(pdf_file, content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="reporte_pagos.pdf"'
+            return response
+
+        except Exception as e:
+            # Manejar la excepción y devolver una respuesta informativa con código de estado 500
+            print(e)
+            message = "Ha ocurrido un error al generar el reporte. Intente nuevamente más tarde."
+            return HttpResponse(message, status=500)
