@@ -23,17 +23,18 @@
                 <small id="helpId" class="form-text text-muted"></small>
             </div>
         </div>
+        
         <div class="mb-3">
             <label for="" class="form-label">Cliente</label>
             <select class="form-control" name="cliente" id="">
                 <option value="">Selecciona un cliente</option>
                 {% for cliente in cliente_list %}
-                    {% if cliente.status %}
                     <option value="{{cliente.id}}">{{cliente.nombre}}</option>
-                    {% endif %}
                 {% endfor %}
             </select>
+        </div>                      
         </div>
+         
         <div class="mb-3">
             <label for="" class="form-label">Cabaña</label>
             <div class="d-flex">

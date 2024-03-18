@@ -68,21 +68,23 @@
                 <a class="nav-link" href="{% url 'reservas' %}">
                     <i class="fas fa-fw fa-bed"></i>
                     <span>Reservas</span></a>
-            </li>
-            {% if request.user.is_superuser or request.user.is_staff %}
-            <!-- Nav Item - Servicios -->
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'servicios' %}">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Servicios</span></a>
-            </li>
+                </li>
+                
+                <!-- Nav Item Cabañas -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'cabañas' %}">
+                        <i class="fas fa-fw fa-table"></i>
+                        <span>Cabañas</span></a>
+                    </li>
+                    
+                    <!-- Nav Item - Servicios -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'servicios' %}">
+                        <i class="fas fa-fw fa-table"></i>
+                        <span>Servicios</span></a>
+                </li>
+                {% if request.user.is_superuser or request.user.is_staff %}
 
-            <!-- Nav Item Cabañas -->
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'cabañas' %}">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Cabañas</span></a>
-            </li>
            
 
             <!-- Nav Item Clientes -->
@@ -165,13 +167,13 @@
 
                         
                        
-                        <div class="topbar-divider d-none d-sm-block"></div>
+                        
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Usuario</span>
+                                <span class="p-3 text-dark">{{ user.first_name}} {{user.last_name}}</span>
                                 <img class="img-profile rounded-circle"
                                     src="{% static 'img/undraw_profile.svg' %}">
                             </a>
@@ -275,4 +277,3 @@
 </body>
 
 </html>
-
