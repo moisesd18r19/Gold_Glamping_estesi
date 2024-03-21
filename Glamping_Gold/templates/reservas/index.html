@@ -30,6 +30,7 @@
                 </thead>
                 <tbody>
                     {% for reserva in reservas_list %}
+                {% if requestuseris_superuser or request.user.is_staff %}
                     <tr>                        
                         <td>{{ reserva.id }}</td>                        
                         <td>{{ reserva.fecha_reserva|date:"d/m/Y" }}</td>                  

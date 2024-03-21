@@ -125,6 +125,77 @@
 
     <!-- Pie Chart -->
    
+
+
+
+
+    <div class="row">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Cabañas</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{count}}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-home fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="container mt-5">
+        <div id="carouselExampleControls" class="carousel slide rounded" data-ride="carousel">
+          <div class="carousel-inner">
+            {% for cabaña in cabañas_index %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+              <div class="row">
+                <div class="col-lg-6 col-md-6">
+                  <div class="item">
+                    <a href=""><img src="{{ cabaña.imagen.url }}" class="img-fluid rounded" alt=""></a>
+                    <span class="category">{{ cabaña.tipocabaña.nombre }}</span>
+                    <h6>$ {{ cabaña.precio }}</h6>
+                    <h4><a href="#">{{ cabaña.nombre }}</a></h4>
+                    <ul>
+                      <li>Capacidad: <span>{{ cabaña.capacidad }}</span></li>
+                      <li>Descripción: <span>{{ cabaña.descripcion }}</span></li>
+                      <li>Parqueadero: <span>Si</span></li>
+                      <li>Chimenea: <span>Si</span></li>
+                    </ul>
+                    <div class="main-button">
+                      <a href="#">Reserva esta cabaña</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Bootstrap JS and jQuery -->
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+      
+    
+    
+      
+      
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         var ctx = document.getElementById("myAreaChart");

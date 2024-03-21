@@ -42,6 +42,8 @@ def index (request):
     mes=ExtractMonth('fecha')
     ).values('mes').annotate(total_ingresos=Sum('valor'))
     meses = range(1, 13)
+    
+    
 
     # Agregar cada mes y su valor a la lista de datos
     data = [["Mes", "Ingresos"]]
@@ -63,12 +65,16 @@ def index (request):
     count_booking2 = Reserva.objects.filter(estado="En ejecución").count()
     total_reservas = count_booking + count_booking2
     
+    cabañas_index = Cabaña.objects.filter(status=True)   
+    
+    
     return render(request, 'index.html', {
         "count": count,
         "count_booking": count_booking,
         "count_booking2": count_booking2,
         "total_reservas": total_reservas,
         "customer": customer,'total_pagos': total_pagos['total'],
+        "cabañas_index": cabañas_index,
         'data': json.dumps(data)
     })
 
@@ -83,6 +89,8 @@ def register(request):
 def landing(request):    
     cabañas_lan = Cabaña.objects.filter(status=True)   
     return render(request, 'landing.html', {'cabañas_lan': cabañas_lan})
+
+
 
 def login(request):
     error = None
