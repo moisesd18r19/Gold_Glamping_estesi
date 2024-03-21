@@ -29,32 +29,65 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for reserva in reservas_list %}
-                {% if requestuseris_superuser or request.user.is_staff %}
-                    <tr>                        
-                        <td>{{ reserva.id }}</td>                        
-                        <td>{{ reserva.fecha_reserva|date:"d/m/Y" }}</td>                  
-                        <td>{{ reserva.cliente.documento}}</td>
-                        <td>{{ reserva.cliente}}</td>                        
-                        <td>{{ reserva.precio }}</td>
-                        <td>{{ reserva.estado }}</td>
-                        <td>                         
-                            <a href="{% url 'detail_reserva' reserva.id %}" class="btn btn-info btn-circle btn-sm">
-                                <i class="fas fa-info-circle"></i></a>
-                            <a href="{% url 'edit_reserva' reserva.id %}" class="btn btn-warning btn-circle btn-sm">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <a href="{% url 'cancel_reserva' reserva.id %}" class="btn btn-danger btn-circle btn-sm deleteBtn">
-                                <i class="fas fa-times"></i>
-                            </a>
-                            <a href="{% url 'Pdfview' reserva.id %}" class="btn btn-danger btn-circle btn-sm">
-                                <span>PDF</span>
-                            <a href="{% url 'pago_reserva' reserva.id %}" class="btn btn-success btn-circle btn-sm">
-                                <i class="fa fa-credit-card "></i>
-                            </a>    
-                        </td>
-                    </tr>
-                    {% endfor %}
+                    {% if request.user.is_superuser or request.user.is_staff %}
+                        {% for reserva in reservas_list %}
+                            <tr>                        
+                                <td>{{ reserva.id }}</td>                        
+                                <td>{{ reserva.fecha_reserva|date:"d/m/Y" }}</td>                  
+                                <td>{{ reserva.cliente.documento}}</td>
+                                <td>{{ reserva.cliente}}</td>                        
+                                <td>{{ reserva.precio }}</td>
+                                <td>{{ reserva.estado }}</td>
+                                <td>                         
+                                    <a href="{% url 'detail_reserva' reserva.id %}" class="btn btn-info btn-circle btn-sm">
+                                        <i class="fas fa-info-circle"></i></a>
+                                    <a href="{% url 'edit_reserva' reserva.id %}" class="btn btn-warning btn-circle btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'cancel_reserva' reserva.id %}" class="btn btn-danger btn-circle btn-sm deleteBtn">
+                                        <i class="fas fa-times"></i>
+                                    </a>
+                                    <a href="{% url 'Pdfview' reserva.id %}" class="btn btn-danger btn-circle btn-sm">
+                                        <span>PDF</span>
+                                    </a>
+                                    <a href="{% url 'pago_reserva' reserva.id %}" class="btn btn-success btn-circle btn-sm">
+                                        <i class="fa fa-credit-card "></i>
+                                    </a>    
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        {% for reserva in reservas_list %}
+                            {% if request.user.email == reserva.cliente.email %}
+                                <tr>                        
+                                    <td>{{ reserva.id }}</td>                        
+                                    <td>{{ reserva.fecha_reserva|date:"d/m/Y" }}</td>                  
+                                    <td>{{ reserva.cliente.documento}}</td>
+                                    <td>{{ reserva.cliente}}</td>                        
+                                    <td>{{ reserva.precio }}</td>
+                                    <td>{{ reserva.estado }}</td>
+                                    <td>                         
+                                        <a href="{% url 'detail_reserva' reserva.id %}" class="btn btn-info btn-circle btn-sm">
+                                            <i class="fas fa-info-circle"></i></a>
+                                        <a href="{% url 'edit_reserva' reserva.id %}" class="btn btn-warning btn-circle btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="{% url 'cancel_reserva' reserva.id %}" class="btn btn-danger btn-circle btn-sm deleteBtn">
+                                            <i class="fas fa-times"></i>
+                                        </a>
+                                        <a href="{% url 'Pdfview' reserva.id %}" class="btn btn-danger btn-circle btn-sm">
+                                            <span>PDF</span>
+                                        </a>
+                                        {% if request.user.is_superuser or request.user.is_staff %} 
+                                        <a href="{% url 'pago_reserva' reserva.id %}" class="btn btn-success btn-circle btn-sm">
+                                            <i class="fa fa-credit-card "></i>
+                                        </a>
+                                        {% endif %}    
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                 </tbody>
             </table>
         </div>
@@ -87,7 +120,5 @@
         });
     });
 </script>
-
-
 
 {% endblock %}

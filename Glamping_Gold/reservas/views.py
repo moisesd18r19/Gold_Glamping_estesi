@@ -27,6 +27,20 @@ def create_reserva(request):
     servicios_list = Servicio.objects.all()
     fecha_actual = datetime.now().date()  # Obtener la fecha actual
     
+   
+
+
+    if request.method == 'POST':
+        # Obtener el correo electrónico del cliente del formulario
+        cliente_email = request.POST['cliente']
+        # Intentar obtener el objeto Costumer correspondiente al correo electrónico
+        try:
+            cliente = Cliente.objects.get(email=cliente_email)
+        except Cliente.DoesNotExist:
+            # Manejar la situación en la que no se encuentra un Costumer
+            cliente = None  # Asignar None para manejarlo en la lógica de creación de la reserva
+        
+
     if request.method == 'POST':
         fecha_inicio_str = request.POST['fecha_inicio']
         fecha_fin_str = request.POST['fecha_fin']
@@ -39,7 +53,7 @@ def create_reserva(request):
             fecha_fin=fecha_fin,
             precio=request.POST['totalValue'],
             estado='Reservado',
-            cliente_id=request.POST['cliente']       
+            cliente=cliente      
         )
         
         reserva.save()
@@ -72,7 +86,7 @@ def create_reserva(request):
         ## messages.success(request, 'Reserva creada con éxito.')
         return HttpResponseRedirect(reverse('reservas'))
 
-    return render(request, 'reservas/create.html',{'cliente_list':cliente_list, 'cabañas_list':cabañas_list, 'servicios_list':servicios_list, 'fecha_actual': fecha_actual})
+    return render(request, 'reservas/create.html',{'cliente_list':cliente_list, 'cabañas_list':cabañas_list, 'servicios_list':servicios_list, 'fecha_actual': fecha_actual, })
 
 def detail_reserva(request, reserva_id):
     reserva = Reserva.objects.get(pk=reserva_id)
@@ -144,7 +158,3 @@ def edit_reserva(request, reserva_id):
         return redirect('reservas')
     
     return render(request, 'reservas/edit.html', {'reserva': reserva, 'cliente_list': cliente_list, 'cabañas_list': cabañas_list, 'servicios_list': servicios_list, 'cabañas_asociadas': cabañas_asociadas, 'servicios_asociados': servicios_asociados})
-
-
-
-

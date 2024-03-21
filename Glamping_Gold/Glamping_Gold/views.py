@@ -282,6 +282,37 @@ class ReportePagos(View):
                 'fecha_actual': fecha_actual,
             })
 
+            # Convertir el HTML a PDF con xhtml2pdf
+            pdf_file = BytesIO()
+            pisa.CreatePDF(BytesIO(html_content.encode('UTF-8')), dest=pdf_file)
+
+            # Devolver el PDF como respuesta
+            response = HttpResponse(pdf_file.getvalue(), content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="reporte_pagos.pdf"'
+            return response
+
+        except Exception as e:
+            # Manejar la excepción y devolver una respuesta informativa con código de estado 500
+            print(e)
+            message = "Ha ocurrido un error al generar el reporte. Intente nuevamente más tarde."
+            return HttpResponse(message, status=500)
+
+
+    def get(self, request, *args, **kwargs):
+        try:
+            # Obtener todos los pagos
+            pagos = Pago.objects.all()
+
+            # Obtener la fecha actual para el encabezado del reporte
+            fecha_actual = datetime.now().strftime("%d/%m/%Y")
+
+            # Renderizar la plantilla HTML
+            template = get_template('reporte_pagos.html')
+            html_content = template.render({
+                'pagos': pagos,
+                'fecha_actual': fecha_actual,
+            })
+
             # Generar PDF desde HTML con pdfkit
             pdf_file = pdfkit.from_string(html_content, False)
 
